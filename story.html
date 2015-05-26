@@ -58,22 +58,16 @@
             <h3>新一届政府提出了“一带一路”的宏伟设想，我们其指引下展开了相关的工作，将原来只聚焦国内需求，放大到跟踪国家在全世界的重大需求。</h3>
           </div>
           <div class="row">
-            <div onclick="javascript:alert('1')">
+            <div onclick="javascript:view.centerOn(ol.proj.transform([100.5, 13.75], 'EPSG:4326', 'EPSG:3857'), olmap.getSize(), half);">
               <h2>在泰国安装SatSee系统</h2>
               <p></p>
               <p><a class="btn btn-default" href="http://v3.bootcss.com/examples/offcanvas/#" role="button">View details »</a></p>
             </div><!--/.col-xs-6.col-lg-4-->
-            <div onclick="javascript:alert('2')">
+            <div onclick="javascript:view.centerOn(ol.proj.transform([85.3, 27.75], 'EPSG:4326', 'EPSG:3857'), olmap.getSize(), half);">
               <h2>为尼泊尔地震处理国产高分1号数据</h2>
-              <p></p>
-              <p><a class="btn btn-default" href="http://v3.bootcss.com/examples/offcanvas/#" role="button">View details »</a></p>
+                <p>现在下载整理尼泊尔地震数据集。DigitalGlobe公司提供了地震前和地震后的大量数据，存放在云端。我们小组将下载这些数据，和我们已有的国产卫星数据组织在一起，为后续多星合作的数据处理打好测试数据的基础。</p>
+                <p><a class="btn btn-default" href="http://v3.bootcss.com/examples/offcanvas/#" role="button">View details »</a></p>
             </div><!--/.col-xs-6.col-lg-4-->
-            <div>
-              <h2>下载整理尼泊尔地震数据集</h2>
-              <p>DigitalGlobe公司提供了地震前和地震后的大量数据，存放在云端。我们小组将下载这些数据，和我们已有的国产卫星数据组织在一起，为后续多星合作的数据处理打好测试数据的基础。</p>
-              <p><a class="btn btn-default" href="http://v3.bootcss.com/examples/offcanvas/#" role="button">View details »</a></p>
-            </div><!--/.col-xs-6.col-lg-4-->
-
 			</div><!--/row-->
         </div><!--/.col-xs-12.col-sm-9-->
 
@@ -96,18 +90,22 @@
     <script src="./story_files/offcanvas.js"></script>
   
     <script type="text/javascript">
-      var map = new ol.Map({
+        var view = new ol.View({
+            center: ol.proj.transform([116.3, 39.9], 'EPSG:4326', 'EPSG:3857'),
+            zoom: 8
+        });
+      var olmap = new ol.Map({
         target: 'map',
         layers: [
           new ol.layer.Tile({
             source: new ol.source.MapQuest({layer: 'sat'})
           })
         ],
-        view: new ol.View({
-          center: ol.proj.transform([37.41, 8.82], 'EPSG:4326', 'EPSG:3857'),
-          zoom: 4
-        })
+        view: view
       });
-    </script>
+        size =olmap.getSize();
+        half = [size[0]/2, size[1]/2];
+
+	</script>
 	
 </body></html>
