@@ -52,23 +52,24 @@ overflow-y: scroll;
         <div class="col-md-12">
           <div class="jumbotron">
             <h1>SatSee服务地图</h1>
-            <h3></h3>
+            <h3>我们的SatSee系统已经在全国十多家单位以及国外多个机构上安装运行。这个网页描述了目前已有的用户，以及我们目前真在开展的用户拓展工作。</h3>
+			<p>(这也是和地图一起讲故事的一个例子，你可以点击文章的任意位置来驱动地图移动，也可以点击地图上的图标来驱动文章重定位)</p>
           </div>
           <div class="row">
             <div onclick="javascript:view.centerOn(ol.proj.transform([100.5, 13.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);">
               <h2 id="bankok"">在泰国安装SatSee系统（点击我看看）</h2>
               <p>在GISTDA的接收站以及办公总部安装了三套SatseeLive和SatseeOrbit软件，颇受好评。
 			  </p>
-			  <img src="img/bankok1.jpg"/><br/>
-			  <img src="img/bankok2.jpg"/><br/>
-			  <img src="img/bankok3.jpg"/><br/>
+			  <img src="img/bankok1.jpg"/><br/><br/>
+			  <img src="img/bankok2.jpg"/><br/><br/>
+			  <img src="img/bankok3.jpg"/><br/><br/>
               <p><a class="btn btn-default" href="" role="button">View details »</a></p>
             </div><!--/.col-xs-6.col-lg-4-->
             <div onclick="javascript:view.centerOn(ol.proj.transform([85.3, 27.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);">
               <h2 id="nepal" >为尼泊尔地震处理国产高分1号数据（点击我看看）</h2>
                 <p>现在下载整理尼泊尔地震数据集。DigitalGlobe公司提供了地震前和地震后的大量数据，存放在云端。我们小组将下载这些数据，和我们已有的国产卫星数据组织在一起，为后续多星合作的数据处理打好测试数据的基础。
 				</p>
-				<img src="http://novachen.github.io/images/nepal_cut.gif"/><br/>
+				<img src="http://novachen.github.io/images/nepal_cut.gif"/><br/><br/>
                 <p><a class="btn btn-default" href="" role="button">View details »</a></p>
             </div><!--/.col-xs-6.col-lg-4-->
 			</div><!--/row-->
@@ -80,9 +81,9 @@ overflow-y: scroll;
 
 <div style="display: none;">
   <!-- Clickable label for Vienna -->
-  <a class="overlay city" id="city1" href="#nepal">加德满都</a>
+  <a class="overlay city" id="city1" href="#nepal">加德满都(点我)</a>
   <div class="marker" id="marker1" title="Marker"></div>
-  <a class="overlay city" id="city2" href="#bankok">曼谷</a>
+  <a class="overlay city" id="city2" href="#bankok">曼谷(点我)</a>
   <div class="marker" id="marker2" title="Marker"></div>
   <!-- Popup -->
   <div id="popup" title="Welcome to ol3"></div>
@@ -139,32 +140,8 @@ var city2 = new ol.Overlay({
 });
 map.addOverlay(city2);
 
-// Popup showing the position the user clicked
-var popup = new ol.Overlay({
-  element: document.getElementById('popup')
-});
-map.addOverlay(popup);
-
-map.on('click', function(evt) {
-  var element = popup.getElement();
-  var coordinate = evt.coordinate;
-  var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(
-      coordinate, 'EPSG:3857', 'EPSG:4326'));
-
-  $(element).popover('destroy');
-  popup.setPosition(coordinate);
-  // the keys are quoted to prevent renaming in ADVANCED mode.
-  $(element).popover({
-    'placement': 'top',
-    'animation': false,
-    'html': true,
-    'content': '<p>The location you clicked was:</p><code>' + hdms + '</code>'
-  });
-  $(element).popover('show');
-});
-
-        size =map.getSize();
-        half = [size[0]/2, size[1]/2];
+size =map.getSize();
+half = [size[0]/2, size[1]/2];
 		
 </script>
 </body>
