@@ -1,111 +1,155 @@
 <!DOCTYPE html>
-<!-- saved from url=(0041)http://v3.bootcss.com/examples/offcanvas/ -->
 <html lang="zh-CN">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
-
-    <title>Off Canvas Template for Bootstrap</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="css/offcanvas.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="./story_files/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 	
-    <link rel="stylesheet" href="css/ol.css" type="text/css">
-    <style>
-      .map {
-        height: 100%;
-        width: 100%;
-      }
-	  .ah
-	  {
-		height: 100%;
-	  }
-	  .scrolly
-	  {
-		overflow-y: scroll;
-	  }
-    </style>
-    <script src="js/ol.js" type="text/javascript"></script>
-	
-  </head>
+<title>Vector Icon Example</title>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
 
-  <body>
+<style>
+#map {
+  position: relative;
+}
+#popup {
+  padding-bottom: 45px;
+}
+</style>
+</head>
 
-      <div class="row row-offcanvas row-offcanvas-right ah">
 
-        <div class="col-xs-12 col-sm-6  ah scrolly">
+<body>
+<div class="container-fluid">
+
+<div class="row-fluid">
+  <div class="col-md-6">
+        <div class="col-md-12">
           <div class="jumbotron">
-            <h1>Satsee系统用户分布</h1>
-            <h3>我们已经在国内外安装运行了几十套终端系统</h3>
+            <h1>中国自然文化遗产</h1>
+            <h3></h3>
           </div>
           <div class="row">
-            <div onclick="javascript:view.centerOn(ol.proj.transform([100.5, 13.75], 'EPSG:4326', 'EPSG:3857'), olmap.getSize(), half);">
+            <div onclick="javascript:view.centerOn(ol.proj.transform([100.5, 13.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);">
               <h2>在泰国安装SatSee系统（点击我看看）</h2>
               <p>在GISTDA的接收站以及办公总部安装了三套SatseeLive和SatseeOrbit软件，颇受好评。</p>
               <p><a class="btn btn-default" href="" role="button">View details »</a></p>
             </div><!--/.col-xs-6.col-lg-4-->
-            <div onclick="javascript:view.centerOn(ol.proj.transform([85.3, 27.75], 'EPSG:4326', 'EPSG:3857'), olmap.getSize(), half);">
+            <div onclick="javascript:view.centerOn(ol.proj.transform([85.3, 27.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);">
               <h2>为尼泊尔地震处理国产高分1号数据（点击我看看）</h2>
                 <p>现在下载整理尼泊尔地震数据集。DigitalGlobe公司提供了地震前和地震后的大量数据，存放在云端。我们小组将下载这些数据，和我们已有的国产卫星数据组织在一起，为后续多星合作的数据处理打好测试数据的基础。</p>
                 <p><a class="btn btn-default" href="" role="button">View details »</a></p>
             </div><!--/.col-xs-6.col-lg-4-->
 			</div><!--/row-->
-        </div><!--/.col-xs-12.col-sm-9-->
+        </div><!--/.col-xs-12.col-sm-9-->  
+  </div>
+  <div class="col-md-6">
+    <div id="map" class="map"><div id="popup"></div></div>
+  </div>
+</div>
 
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 sidebar-offcanvas ah" id="sidebar">
-		  <div id="map" class="map"></div>
-        </div><!--/.sidebar-offcanvas-->
-      </div><!--/row-->
-	  
+</div>
+<script>
 
+var iconFeature1 = new ol.Feature({
+  geometry: new ol.geom.Point(ol.proj.transform([100.5, 13.75], 'EPSG:4326', 'EPSG:3857')),
+  name: '曼谷',
+  population: 4000,
+  rainfall: 500
+});
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="./story_files/jquery.min.js"></script>
-    <script src="./story_files/bootstrap.min.js"></script>
+var iconFeature2 = new ol.Feature({
+  geometry: new ol.geom.Point(ol.proj.transform([85.3, 27.75], 'EPSG:4326', 'EPSG:3857')),
+  name: '加德满都',
+  population: 4000,
+  rainfall: 500
+});
 
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="./story_files/ie10-viewport-bug-workaround.js"></script>
+var iconStyle = new ol.style.Style({
+  image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+    anchor: [0.5, 46],
+    anchorXUnits: 'fraction',
+    anchorYUnits: 'pixels',
+    opacity: 0.75,
+    src: 'http://openlayers.org/en/v3.5.0/examples/data/icon.png'
+  }))
+});
 
-    <script src="./story_files/offcanvas.js"></script>
-  
-    <script type="text/javascript">
-        var view = new ol.View({
-            center: ol.proj.transform([116.3, 39.9], 'EPSG:4326', 'EPSG:3857'),
-            zoom: 8
-        });
-      var olmap = new ol.Map({
-        target: 'map',
-        layers: [
-          new ol.layer.Tile({
-            source: new ol.source.MapQuest({layer: 'sat'})
-          })
-        ],
-        view: view
+iconFeature1.setStyle(iconStyle);
+iconFeature2.setStyle(iconStyle);
+
+var vectorSource = new ol.source.Vector({
+  features: [iconFeature1, iconFeature2]
+});
+
+var vectorLayer = new ol.layer.Vector({
+  source: vectorSource
+});
+
+var rasterLayer = new ol.layer.Tile({
+  source: new ol.source.TileJSON({
+    url: 'http://api.tiles.mapbox.com/v3/mapbox.geography-class.jsonp',
+    crossOrigin: ''
+  })
+});
+
+var view = new ol.View({
+	center: ol.proj.transform([100, 40], 'EPSG:4326', 'EPSG:3857'),
+	zoom: 4
+});
+
+var map = new ol.Map({
+  layers: [rasterLayer, vectorLayer],
+  target: document.getElementById('map'),
+  view: view
+});
+
+var element = document.getElementById('popup');
+
+var popup = new ol.Overlay({
+  element: element,
+  positioning: 'bottom-center',
+  stopEvent: false
+});
+map.addOverlay(popup);
+
+// display popup on click
+map.on('click', function(evt) {
+  var feature = map.forEachFeatureAtPixel(evt.pixel,
+      function(feature, layer) {
+        return feature;
       });
-        size =olmap.getSize();
-        half = [size[0]/2, size[1]/2];
+  if (feature) {
+    var geometry = feature.getGeometry();
+    var coord = geometry.getCoordinates();
+    popup.setPosition(coord);
+    $(element).popover({
+      'placement': 'top',
+      'html': true,
+      'content': feature.get('name')
+    });
+    $(element).popover('show');
+  } else {
+    $(element).popover('destroy');
+  }
+});
 
-	</script>
-	
-</body></html>
+// change mouse cursor when over marker
+map.on('pointermove', function(e) {
+  if (e.dragging) {
+    $(element).popover('destroy');
+    return;
+  }
+  var pixel = map.getEventPixel(e.originalEvent);
+  var hit = map.hasFeatureAtPixel(pixel);
+  map.getTarget().style.cursor = hit ? 'pointer' : '';
+});
+
+        size =map.getSize();
+        half = [size[0]/2, size[1]/2];
+</script>
+</body>
+</html>
