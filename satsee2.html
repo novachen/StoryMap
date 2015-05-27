@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+	
+<title>Overlay example</title>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+    <link href="css/offcanvas.css" rel="stylesheet">
+	
+
+<style>
+.marker {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #088;
+  border-radius: 10px;
+  background-color: #0FF;
+  opacity: 0.5;
+}
+.city {
+  text-decoration: none;
+  color: white;
+  font-size: 11pt;
+  font-weight: bold;
+  text-shadow: black 0.1em 0.1em 0.2em;
+}
+.popover-content {
+  min-width: 180px;
+}
+.map {
+	height: 100%;
+	width: 100%;
+}
+.ah {
+	height: 100%;
+}
+.scrolly
+{
+overflow-y: scroll;
+}
+</style>
+</head>
+<body>
+
+<div class="row ah">
+  <div class="col-md-6 ah scrolly">
+        <div class="col-md-12">
+          <div class="jumbotron">
+            <h1>SatSee服务地图</h1>
+            <h3></h3>
+          </div>
+          <div class="row">
+            <div onclick="javascript:view.centerOn(ol.proj.transform([100.5, 13.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);">
+              <h2 id="bankok"">在泰国安装SatSee系统（点击我看看）</h2>
+              <p>在GISTDA的接收站以及办公总部安装了三套SatseeLive和SatseeOrbit软件，颇受好评。
+			  </p>
+			  <img src="img/bankok1.jpg"/><br/>
+			  <img src="img/bankok2.jpg"/><br/>
+			  <img src="img/bankok3.jpg"/><br/>
+              <p><a class="btn btn-default" href="" role="button">View details »</a></p>
+            </div><!--/.col-xs-6.col-lg-4-->
+            <div onclick="javascript:view.centerOn(ol.proj.transform([85.3, 27.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);">
+              <h2 id="nepal" >为尼泊尔地震处理国产高分1号数据（点击我看看）</h2>
+                <p>现在下载整理尼泊尔地震数据集。DigitalGlobe公司提供了地震前和地震后的大量数据，存放在云端。我们小组将下载这些数据，和我们已有的国产卫星数据组织在一起，为后续多星合作的数据处理打好测试数据的基础。
+				</p>
+				<img src="http://novachen.github.io/images/nepal_cut.gif"/><br/>
+                <p><a class="btn btn-default" href="" role="button">View details »</a></p>
+            </div><!--/.col-xs-6.col-lg-4-->
+			</div><!--/row-->
+        </div><!--/.col-xs-12.col-sm-9-->  
+  </div>
+  <div class="col-md-6 ah">
+    <div id="map" class="map"><div id="popup"></div></div>
+  </div>
+
+<div style="display: none;">
+  <!-- Clickable label for Vienna -->
+  <a class="overlay city" id="city1" target="_blank" href="#nepal">加德满都</a>
+  <div class="marker" id="marker1" title="Marker"></div>
+  <a class="overlay city" id="city2" target="_blank" href="#bankok">曼谷</a>
+  <div class="marker" id="marker2" title="Marker"></div>
+  <!-- Popup -->
+  <div id="popup" title="Welcome to ol3"></div>
+</div>
+
+</div>
+<script>
+var layer = new ol.layer.Tile({
+  source: new ol.source.MapQuest({layer: 'sat'})
+});
+
+var view = new ol.View({
+	center: ol.proj.transform([116.3, 39.9], 'EPSG:4326', 'EPSG:3857'),
+	zoom: 4
+});
+		
+var map = new ol.Map({
+  layers: [layer],
+  target: 'map',
+  view: view
+});
+
+var pos1 = ol.proj.fromLonLat([85.3, 27.75]);
+var pos2 = ol.proj.fromLonLat([100.5, 13.75]);
+
+// Vienna marker
+var marker1 = new ol.Overlay({
+  position: pos1,
+  positioning: 'center-center',
+  element: document.getElementById('marker1'),
+  stopEvent: false
+});
+map.addOverlay(marker1);
+
+// Vienna label
+var city1 = new ol.Overlay({
+  position: pos1,
+  element: document.getElementById('city1')
+});
+map.addOverlay(city1);
+
+var marker2 = new ol.Overlay({
+  position: pos2,
+  positioning: 'center-center',
+  element: document.getElementById('marker2'),
+  stopEvent: false
+});
+map.addOverlay(marker2);
+
+// Vienna label
+var city2 = new ol.Overlay({
+  position: pos2,
+  element: document.getElementById('city2')
+});
+map.addOverlay(city2);
+
+// Popup showing the position the user clicked
+var popup = new ol.Overlay({
+  element: document.getElementById('popup')
+});
+map.addOverlay(popup);
+
+map.on('click', function(evt) {
+  var element = popup.getElement();
+  var coordinate = evt.coordinate;
+  var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(
+      coordinate, 'EPSG:3857', 'EPSG:4326'));
+
+  $(element).popover('destroy');
+  popup.setPosition(coordinate);
+  // the keys are quoted to prevent renaming in ADVANCED mode.
+  $(element).popover({
+    'placement': 'top',
+    'animation': false,
+    'html': true,
+    'content': '<p>The location you clicked was:</p><code>' + hdms + '</code>'
+  });
+  $(element).popover('show');
+});
+
+        size =map.getSize();
+        half = [size[0]/2, size[1]/2];
+		
+</script>
+</body>
+</html>
