@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Layer group example</title>
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <style>
+        #layertree li > span {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+
+    <div class="row-fluid">
+        <div class="col-md-6">
+            <div id="map" class="map"></div>
+        </div>
+        <div id="layertree" class="col-md-6">
+            <h5>Click on layer nodes below to change their properties.</h5>
+            <ul>
+                <li><span>Layer group</span>
+                    <fieldset id="layer0">
+                        <label class="checkbox" for="visible1">
+                            <input id="visible1" class="visible" type="checkbox"/>visibility
+                        </label>
+                        <label>opacity</label>
+                        <input class="opacity" type="range" min="0" max="1" step="0.01"/>
+                        </fieldset>
+                    <ul>
+                        <li><span>04-11 地震前</span>
+                            <fieldset id="layer00">
+                                <label class="checkbox" for="visible10">
+                                    <input id="visible10" class="visible" type="checkbox"/>visibility
+                                </label>
+                                <label>opacity</label>
+                                <input class="opacity" type="range" min="0" max="1" step="0.01"/>
+                            </fieldset>
+                        </li>
+                        <li><span>04-27 地震后（04-25地震日）</span>
+                            <fieldset id="layer01">
+                                <label class="checkbox" for="visible11">
+                                    <input id="visible11" class="visible" type="checkbox"/>visibility
+                                </label>
+                                <label>opacity</label>
+                                <input class="opacity" type="range" min="0" max="1" step="0.01"/>
+                            </fieldset>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+<script>
+    var extent = [0, 0, 1024, 968];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+
+    var map = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    new ol.layer.Image({
+                        source: new ol.source.ImageStatic({
+                            attributions: [
+                                new ol.Attribution({
+                                    html: '&copy; novachen</a>'
+                                })
+                            ],
+                            url: 'http://novachen.github.io/images/e0411.jpg',
+                            projection: projection,
+                            imageExtent: extent
+                        })
+                    }),
+                    new ol.layer.Image({
+                        source: new ol.source.ImageStatic({
+                            attributions: [
+                                new ol.Attribution({
+                                    html: '&copy; novachen</a>'
+                                })
+                            ],
+                            url: 'http://novachen.github.io/images/e0427.jpg',
+                            projection: projection,
+                            imageExtent: extent
+                        })
+                    })
+                ]
+
+            })
+        ],
+        target: 'map',
+        view: new ol.View({
+            projection: projection,
+            center: ol.extent.getCenter(extent),
+            zoom: 2
+        })
+    });
+
+
+    function bindInputs(layerid, layer) {
+        var visibilityInput = $(layerid + ' input.visible');
+        visibilityInput.on('change', function() {
+            layer.setVisible(this.checked);
+        });
+        visibilityInput.prop('checked', layer.getVisible());
+
+        $.each(['opacity'],
+                function(i, v) {
+                    var input = $(layerid + ' input.' + v);
+                    input.on('input change', function() {
+                        layer.set(v, parseFloat(this.value));
+                    });
+                    input.val(String(layer.get(v)));
+                }
+        );
+    }
+    map.getLayers().forEach(function(layer, i) {
+        bindInputs('#layer' + i, layer);
+        if (layer instanceof ol.layer.Group) {
+            layer.getLayers().forEach(function(sublayer, j) {
+                bindInputs('#layer' + i + j, sublayer);
+            });
+        }
+    });
+
+    $('#layertree li > span').click(function() {
+        $(this).siblings('fieldset').toggle();
+    });
+
+</script>
+</body>
+</html>
