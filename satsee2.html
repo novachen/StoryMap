@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -43,6 +43,24 @@
 {
 overflow-y: scroll;
 }
+.normalcss
+	  {
+	      background:#E4E4E4;
+	   }
+	   .normalcss a
+	   {
+	       font-family:microsoft yahei,arial;
+	       color:#000000;
+	   }
+	  .clickcss
+	  {
+	      background:#797979;
+	   }
+	   .clickcss a
+	   {
+	       font-family:microsoft yahei,arial;
+	       color:#ffffff;
+	   }
 </style>
 </head>
 <body>
@@ -56,21 +74,32 @@ overflow-y: scroll;
 			<p>(这也是和地图一起讲故事(StoryMap)的一个例子，你可以点击文章的任意位置来驱动地图移动，也可以点击地图上的图标来驱动文章重定位)</p>
           </div>
           <div class="row">
-            <div onclick="javascript:view.centerOn(ol.proj.transform([100.5, 13.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);">
-              <h2 id="bankok"">在泰国安装SatSee系统（点击我看看）</h2>
-              <p>在GISTDA的接收站以及办公总部安装了三套SatseeLive和SatseeOrbit软件，颇受好评。
-			  </p>
+            <div onclick="javascript:view.centerOn(ol.proj.transform([87.616, 43.827], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);changecss(this);" class="normalcss">
+              <h2 id="wlmq">新疆维吾尔自治区科技发展战略研究院购置了SatSee系统（点击我看看）</h2>
+              <p></p>
+			  <img src="img/wlmq1.jpg"/><br/><br/>
+            </div><!--/.col-xs-6.col-lg-4-->
+            <div onclick="javascript:view.centerOn(ol.proj.transform([104.894, 11.537], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);changecss(this);" class="normalcss">
+              <h2 id="jinbian">在柬埔寨为吴哥窟管理局安装SatSee系统（点击我看看）</h2>
+              <p></p>
+			  <img src="img/jpz1.jpg"/><br/><br/>
+			  <img src="img/jpz2.jpg"/><br/><br/>
+            </div><!--/.col-xs-6.col-lg-4-->
+            <div onclick="javascript:view.centerOn(ol.proj.transform([100.5, 13.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);changecss(this);" class="normalcss">
+              <h2 id="bankok">在泰国安装SatSee系统（点击我看看）</h2>
+              <h3>在GISTDA的接收站以及办公总部安装了三套SatseeLive和SatseeOrbit软件，颇受好评。
+			  </h3>
 			  <img src="img/bankok1.jpg"/><br/><br/>
 			  <img src="img/bankok2.jpg"/><br/><br/>
 			  <img src="img/bankok3.jpg"/><br/><br/>
-              <p><a class="btn btn-default" href="" role="button">View details »</a></p>
             </div><!--/.col-xs-6.col-lg-4-->
-            <div onclick="javascript:view.centerOn(ol.proj.transform([85.3, 27.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);">
+            <div onclick="javascript:view.centerOn(ol.proj.transform([85.3, 27.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);changecss(this);" class="normalcss">
               <h2 id="nepal" >为尼泊尔地震处理国产高分1号数据（点击我看看）</h2>
-                <p>现在下载整理尼泊尔地震数据集。DigitalGlobe公司提供了地震前和地震后的大量数据，存放在云端。我们小组将下载这些数据，和我们已有的国产卫星数据组织在一起，为后续多星合作的数据处理打好测试数据的基础。
-				</p>
+                <h3>现在下载整理尼泊尔地震数据集。DigitalGlobe公司提供了地震前和地震后的大量数据，存放在云端。我们小组将下载这些数据，和我们已有的国产卫星数据组织在一起，为后续多星合作的数据处理打好测试数据的基础。
+				</h3>
+				<img src="http://novachen.github.io/images/e.gif"/><br/><br/>
+				<img src="http://novachen.github.io/images/es.jpg"/><br/><br/>
 				<img src="http://novachen.github.io/images/nepal_cut.gif"/><br/><br/>
-                <p><a class="btn btn-default" href="" role="button">View details »</a></p>
             </div><!--/.col-xs-6.col-lg-4-->
 			</div><!--/row-->
         </div><!--/.col-xs-12.col-sm-9-->  
@@ -79,68 +108,64 @@ overflow-y: scroll;
     <div id="map" class="map"><div id="popup"></div></div>
   </div>
 
-<div style="display: none;">
-  <!-- Clickable label -->
-  <a class="overlay city" id="city1" href="#nepal">加德满都(点我)</a>
-  <div class="marker" id="marker1" title="Marker"></div>
-  <a class="overlay city" id="city2" href="#bankok">曼谷(点我)</a>
-  <div class="marker" id="marker2" title="Marker"></div>
+<div style="display: none;" id="mapinfo">
 </div>
 
 </div>
-<script>
+<script type="text/javascript">
+    var fields = "曼谷,bankok,100.5,13.75;金边,jinbian,104.894,11.537;加德满都,nepal,85.3,27.75;乌鲁木齐,wlmq,87.616,43.827";
 var layer = new ol.layer.Tile({
   source: new ol.source.MapQuest({layer: 'sat'})
 });
-
 var view = new ol.View({
-	center: ol.proj.transform([116.3, 39.9], 'EPSG:4326', 'EPSG:3857'),
-	zoom: 4
-});
-		
+    center: ol.proj.transform([100, 30], 'EPSG:4326', 'EPSG:3857'),
+	zoom: 5
+});		
 var map = new ol.Map({
   layers: [layer],
   target: 'map',
   view: view
 });
+function changecss(obj) {
+    var d = document.getElementsByClassName('clickcss');
+    for (var i = 0; i < d.length; i++) {
+        d[i].className = "normalcss";
+    }
+    obj.className = "clickcss";
+}
 
-var pos1 = ol.proj.fromLonLat([85.3, 27.75]);
-var pos2 = ol.proj.fromLonLat([100.5, 13.75]);
+var maphtml = "";
+var s1 = fields.split(";");
+for (var i = 1; i <= s1.length; i++) {
+    var s2 = s1[i-1].split(",");
+    maphtml += "<a class=\"overlay city\" id=\"city" +i + "\" href=\"#"+s2[1]+"\">" + s2[0] + "</a><div class=\"marker\" id=\"marker" + i + "\" title=\"Marker\"></div>";
+}
+document.getElementById("mapinfo").innerHTML = maphtml;
 
-// Vienna marker
-var marker1 = new ol.Overlay({
-  position: pos1,
-  positioning: 'center-center',
-  element: document.getElementById('marker1'),
-  stopEvent: false
-});
-map.addOverlay(marker1);
-
-// Vienna label
-var city1 = new ol.Overlay({
-  position: pos1,
-  element: document.getElementById('city1')
-});
-map.addOverlay(city1);
-
-var marker2 = new ol.Overlay({
-  position: pos2,
-  positioning: 'center-center',
-  element: document.getElementById('marker2'),
-  stopEvent: false
-});
-map.addOverlay(marker2);
-
-// Vienna label
-var city2 = new ol.Overlay({
-  position: pos2,
-  element: document.getElementById('city2')
-});
-map.addOverlay(city2);
-
-size =map.getSize();
-half = [size[0]/2, size[1]/2];
-		
+for (var i = 1; i <= s1.length; i++) {
+    var s2 = s1[i-1].split(",");
+    var a = new Array(parseFloat(s2[2]),parseFloat(s2[3]));
+    var pos = ol.proj.fromLonLat(a);
+    var marker = new ol.Overlay({
+        position: pos,
+        positioning: 'center-center',
+        element: document.getElementById('marker' + i),
+        stopEvent: false
+    });
+    map.addOverlay(marker);
+}
+for (var i = 1; i <= s1.length; i++) {
+    var s2 = s1[i-1].split(",");
+    var a = new Array(parseFloat(s2[2]), parseFloat(s2[3]));
+    var pos = ol.proj.fromLonLat(a);
+    var city = new ol.Overlay({
+        position: pos,
+        element: document.getElementById('city' + i)
+    });
+    map.addOverlay(city);
+}
+size = map.getSize();
+half = [size[0] / 2, size[1] / 2];
 </script>
 </body>
 </html>
