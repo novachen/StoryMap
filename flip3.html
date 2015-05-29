@@ -138,7 +138,7 @@
         });
         visibilityInput.prop('checked', layer.getVisible());
 
-        $.each(['opacity'],
+        $.each(['opacity', 'hue', 'saturation', 'contrast', 'brightness'],
                 function(i, v) {
                     var input = $(layerid + ' input.' + v);
                     input.on('input change', function() {
@@ -161,7 +161,7 @@
         $(this).siblings('fieldset').toggle();
     });
 
-<!--	setInterval('flickImage()',1000);  -->
+	setInterval('flickImage()',1000); 
 	
 	function flickImage()
 	{
