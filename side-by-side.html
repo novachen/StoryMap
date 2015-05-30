@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Side-by-side example</title>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+</head>
+<body>
+
+<div class="row">
+  <div class="col-md-4">
+    <h4>Canvas</h4>
+    <div id="canvasMap" class="map"></div>
+  </div>
+  <div class="col-md-4">
+    <h4>WebGL</h4>
+    <div id="webglMap" class="map"></div>
+    <div id="no-webgl" class="alert alert-error" style="display: none">
+      This map requires a browser that supports <a href="http://get.webgl.org/">WebGL</a>.
+    </div>
+  </div>
+  <div class="col-md-4">
+    <h4>DOM</h4>
+    <div id="domMap" class="map"></div>
+  </div>
+</div>
+
+<script>
+
+layer1 =     new ol.layer.Tile({
+      source: new ol.source.MapQuest({layer: 'sat'})
+    });
+layer2 =    new ol.layer.Tile({
+  source: new ol.source.TileJSON({
+    url: 'http://api.tiles.mapbox.com/v3/mapbox.geography-class.jsonp',
+    crossOrigin: ''
+  })
+});
+	
+  view = new ol.View({
+    center: [0, 0],
+    zoom: 1
+  });
+  
+if (ol.has.WEBGL) {
+  var webglMap = new ol.Map({
+    renderer: 'webgl',
+    target: 'webglMap',
+    layers:  [layer1],
+    view: view
+  });
+} else {
+  var info = document.getElementById('no-webgl');
+  /**
+   * display error message
+   */
+  info.style.display = '';
+}
+
+var canvasMap = new ol.Map({
+  target: 'canvasMap',
+  layers: [layer1],
+  view: view
+});
+
+var domMap = new ol.Map({
+  target: 'domMap',
+  layers: [layer2],
+  view: view
+});
+
+</script>
+</body>
+</html>

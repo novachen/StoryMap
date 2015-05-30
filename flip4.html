@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+	
+    <title>Layer group example</title>
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+    <link href="css/offcanvas.css" rel="stylesheet">
+	
+    <style>
+	
+        #layertree li > span {
+            cursor: pointer;
+        }
+.map {
+	height: 100%;
+	width: 100%;
+}
+.ah {
+	height: 100%;
+}
+.hh {
+	height: 50%;
+}		
+    </style>
+</head>
+<body>
+
+    <div class="row ah">
+		<div class="col-md-10 ah">
+			<div class="row hh">
+				<div class="col-md-6 ah">
+					<div id="map" class="map"></div>
+				</div>
+				<div class="col-md-6 ah">
+					<div id="map2" class="map"></div>
+				</div>
+			</div>
+			<div class="row hh">		
+				<div class="col-md-6 ah">
+					<div id="map3" class="map"></div>
+				</div>
+				<div class="col-md-6 ah">
+					<div id="map4" class="map"></div>
+				</div>
+			</div>
+		</div>
+        <div id="layertree" class="col-md-2 ah">
+            <h5>Click on layer nodes below to change their properties.</h5>
+            <ul>
+                <li><span>Layer group</span>
+                    <fieldset id="layer0">
+                        <label class="checkbox" for="visible1">
+                            <input id="visible1" class="visible" type="checkbox"/>visibility
+                        </label>
+                        <label>opacity</label>
+                        <input class="opacity" type="range" min="0" max="1" step="0.01"/>
+                        <label>hue</label>
+                        <input class="hue" type="range" min="-3.141592653589793" max="3.141592653589793" step="0.01"/>
+                        <label>saturation</label>
+                        <input class="saturation" type="range" min="0" max="5" step="0.01"/>
+                        <label>contrast</label>
+                        <input class="contrast" type="range" min="0" max="2" step="0.01"/>
+                        <label>brightness</label>
+                        <input class="brightness" type="range" min="-1" max="1" step="0.01"/>
+                        </fieldset>
+                    <ul>
+                        <li><span>04-11 地震前</span>
+                            <fieldset id="layer00">
+                                <label class="checkbox" for="visible10">
+                                    <input id="visible10" class="visible" type="checkbox"/>visibility
+                                </label>
+                                <label>opacity</label>
+                                <input class="opacity" type="range" min="0" max="1" step="0.01"/>
+                            </fieldset>
+                        </li>
+                        <li><span>04-27 地震后（04-25地震日）</span>
+                            <fieldset id="layer01">
+                                <label class="checkbox" for="visible11">
+                                    <input id="visible11" class="visible" type="checkbox"/>visibility
+                                </label>
+                                <label>opacity</label>
+                                <input class="opacity" type="range" min="0" max="1" step="0.01"/>
+                            </fieldset>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+<script>
+    var extent = [0, 0, 1960, 1960];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+
+	layer1 =                     new ol.layer.Image({
+                        source: new ol.source.ImageStatic({
+                            attributions: [
+                                new ol.Attribution({
+                                    html: '&copy; novachen</a>'
+                                })
+                            ],
+                            url: 'http://novachen.github.io/images/e0411.jpg',
+                            projection: projection,
+                            imageExtent: extent
+                        })
+                    });
+
+	layer2 =                     new ol.layer.Image({
+                        source: new ol.source.ImageStatic({
+                            attributions: [
+                                new ol.Attribution({
+                                    html: '&copy; novachen</a>'
+                                })
+                            ],
+                            url: 'http://novachen.github.io/images/e0427.jpg',
+                            projection: projection,
+                            imageExtent: extent
+                        })
+                    });
+	layer10 =                     new ol.layer.Image({
+                        source: new ol.source.ImageStatic({
+                            attributions: [
+                                new ol.Attribution({
+                                    html: '&copy; novachen</a>'
+                                })
+                            ],
+                            url: 'http://novachen.github.io/images/e0411.jpg',
+                            projection: projection,
+                            imageExtent: extent
+                        })
+                    });
+
+	layer20 =                     new ol.layer.Image({
+                        source: new ol.source.ImageStatic({
+                            attributions: [
+                                new ol.Attribution({
+                                    html: '&copy; novachen</a>'
+                                })
+                            ],
+                            url: 'http://novachen.github.io/images/e0427.jpg',
+                            projection: projection,
+                            imageExtent: extent
+                        })
+                    });
+	view = new ol.View({
+            projection: projection,
+            center: ol.extent.getCenter(extent),
+            zoom: 2
+        });
+		
+    var map = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+					layer1,
+					layer2
+                ]
+
+            })
+        ],
+		renderer: 'canvas',
+        target: 'map',
+        view: view
+    });
+
+    var map2 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+					layer10
+                ]
+
+            })
+        ],
+		renderer: 'canvas',
+        target: 'map2',
+        view: view
+    });
+	
+    var map3 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+					layer20
+                ]
+
+            })
+        ],
+		renderer: 'canvas',
+        target: 'map3',
+        view: view
+    });
+	
+    function bindInputs(layerid, layer) {
+        var visibilityInput = $(layerid + ' input.visible');
+        visibilityInput.on('change', function() {
+            layer.setVisible(this.checked);
+        });
+        visibilityInput.prop('checked', layer.getVisible());
+
+        $.each(['opacity', 'hue', 'saturation', 'contrast', 'brightness'],
+                function(i, v) {
+                    var input = $(layerid + ' input.' + v);
+                    input.on('input change', function() {
+                        layer.set(v, parseFloat(this.value));
+                    });
+                    input.val(String(layer.get(v)));
+                }
+        );
+    }
+    map.getLayers().forEach(function(layer, i) {
+        bindInputs('#layer' + i, layer);
+        if (layer instanceof ol.layer.Group) {
+            layer.getLayers().forEach(function(sublayer, j) {
+                bindInputs('#layer' + i + j, sublayer);
+            });
+        }
+    });
+
+    $('#layertree li > span').click(function() {
+        $(this).siblings('fieldset').toggle();
+    });
+
+	setInterval('flickImage()',1000); 
+	
+	function flickImage()
+	{
+		console.log(layer2.getVisible());
+		layer2.setVisible(!layer2.getVisible());
+        var visibilityInput = $('#layer01' + ' input.visible');
+        visibilityInput.prop('checked', layer2.getVisible());		
+	}
+	
+</script>
+</body>
+</html>
