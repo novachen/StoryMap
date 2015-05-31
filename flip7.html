@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
 
-    <title>新疆阿克陶冰川移动</title>
+    <title>新疆阿克陶冰川移动(webgl)</title>
 
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -71,7 +71,7 @@
                     <input class="brightness" type="range" min="-1" max="1" step="0.01"/>
                 </fieldset>
                 <ul>
-                    <li><span>04-11 地震前</span>
+                    <li><span>【4月29日 冰川移动前】</span>
                         <fieldset id="layer00">
                             <label class="checkbox" for="visible10">
                                 <input id="visible10" class="visible" type="checkbox"/>visibility
@@ -80,7 +80,7 @@
                             <input class="opacity" type="range" min="0" max="1" step="0.01"/>
                         </fieldset>
                     </li>
-                    <li><span>04-27 地震后（04-25地震日）</span>
+                    <li><span>【5月15日 冰川移动后】</span>
                         <fieldset id="layer01">
                             <label class="checkbox" for="visible11">
                                 <input id="visible11" class="visible" type="checkbox"/>visibility
@@ -158,7 +158,7 @@
 
             })
         ],
-        renderer: 'canvas',
+        renderer: 'webgl',
         target: 'map',
         view: view
     });
@@ -172,7 +172,7 @@
 
             })
         ],
-        renderer: 'canvas',
+        renderer: 'webgl',
         target: 'map2',
         view: view
     });
@@ -186,7 +186,7 @@
 
             })
         ],
-        renderer: 'canvas',
+        renderer: 'webgl',
         target: 'map3',
         view: view
     });
