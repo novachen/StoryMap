@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
 
-    <title>尼泊尔地震（四视图webgl）</title>
+    <title>新疆阿克陶冰川移动</title>
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -36,20 +36,15 @@
 
 <div class="row ah">
     <div class="col-md-10 ah">
-        <div class="row hh">
-            <div class="col-md-6 ah">
-                <div id="map" class="map"></div>
-            </div>
-            <div class="col-md-6 ah">
+        <div class="col-md-6 ah">
+            <div id="map" class="map"></div>
+        </div>
+        <div class="col-md-6 ah">
+            <div class="row hh">
                 <div id="map2" class="map"></div>
             </div>
-        </div>
-        <div class="row hh">
-            <div class="col-md-6 ah">
+            <div class="row hh">
                 <div id="map3" class="map"></div>
-            </div>
-            <div class="col-md-6 ah">
-                <div id="map4" class="map"></div>
             </div>
         </div>
     </div>
@@ -98,63 +93,52 @@
 </div>
 
 <script>
-    var extent = [0, 0, 1960, 1960];
+    var extent = [0, 0, 4000, 4000];
     var projection = new ol.proj.Projection({
         code: 'xkcd-image',
         units: 'pixels',
         extent: extent
     });
 
+    source1 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【4月29日 冰川移动前】'
+            })
+        ],
+        url: 'img/s119.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+    source2 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【5月15日 冰川移动后】'
+            })
+        ],
+        url: 'img/s135.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+
     layer1 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0411.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source1
     });
 
     layer2 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0427.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source2
     });
+
     layer10 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0411.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source1
     });
 
     layer20 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0427.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source2
     });
+
     view = new ol.View({
         projection: projection,
         center: ol.extent.getCenter(extent),
@@ -171,7 +155,7 @@
 
             })
         ],
-        renderer: 'webgl',
+        renderer: 'canvas',
         target: 'map',
         view: view
     });
@@ -185,7 +169,7 @@
 
             })
         ],
-        renderer: 'webgl',
+        renderer: 'canvas',
         target: 'map2',
         view: view
     });
@@ -199,7 +183,7 @@
 
             })
         ],
-        renderer: 'webgl',
+        renderer: 'canvas',
         target: 'map3',
         view: view
     });
@@ -237,7 +221,7 @@
     setInterval('flickImage()', 1000);
 
     function flickImage() {
-        console.log(layer2.getVisible());
+//        console.log(layer2.getVisible());
         layer2.setVisible(!layer2.getVisible());
         var visibilityInput = $('#layer01' + ' input.visible');
         visibilityInput.prop('checked', layer2.getVisible());

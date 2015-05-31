@@ -4,12 +4,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
 
-    <title>尼泊尔地震（四视图webgl）</title>
-    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <title>尼泊尔地震（三视图）</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
     <link href="css/offcanvas.css" rel="stylesheet">
 
     <style>
@@ -36,20 +39,15 @@
 
 <div class="row ah">
     <div class="col-md-10 ah">
-        <div class="row hh">
-            <div class="col-md-6 ah">
-                <div id="map" class="map"></div>
-            </div>
-            <div class="col-md-6 ah">
+        <div class="col-md-6 ah">
+            <div id="map" class="map"></div>
+        </div>
+        <div class="col-md-6 ah">
+            <div class="row hh">
                 <div id="map2" class="map"></div>
             </div>
-        </div>
-        <div class="row hh">
-            <div class="col-md-6 ah">
+            <div class="row hh">
                 <div id="map3" class="map"></div>
-            </div>
-            <div class="col-md-6 ah">
-                <div id="map4" class="map"></div>
             </div>
         </div>
     </div>
@@ -98,63 +96,52 @@
 </div>
 
 <script>
-    var extent = [0, 0, 1960, 1960];
+    var extent = [0, 0, 15521, 15801];
     var projection = new ol.proj.Projection({
         code: 'xkcd-image',
         units: 'pixels',
         extent: extent
     });
 
+    source1 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【4月11日 地震前】'
+            })
+        ],
+        url: 'http://novachen.github.io/images/e0411.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+    source2 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【4月27日 地震后】'
+            })
+        ],
+        url: 'http://novachen.github.io/images/e0427.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+
     layer1 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0411.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source1
     });
 
     layer2 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0427.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source2
     });
+
     layer10 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0411.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source1
     });
 
     layer20 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0427.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source2
     });
+
     view = new ol.View({
         projection: projection,
         center: ol.extent.getCenter(extent),
@@ -171,7 +158,7 @@
 
             })
         ],
-        renderer: 'webgl',
+        renderer: 'canvas',
         target: 'map',
         view: view
     });
@@ -185,7 +172,7 @@
 
             })
         ],
-        renderer: 'webgl',
+        renderer: 'canvas',
         target: 'map2',
         view: view
     });
@@ -199,7 +186,7 @@
 
             })
         ],
-        renderer: 'webgl',
+        renderer: 'canvas',
         target: 'map3',
         view: view
     });

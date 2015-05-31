@@ -3,178 +3,233 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-	
-<title>Overlay example</title>
-<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
-    <link href="css/offcanvas.css" rel="stylesheet">
-	
 
-<style>
-.marker {
-  width: 20px;
-  height: 20px;
-  border: 1px solid #088;
-  border-radius: 10px;
-  background-color: #0FF;
-  opacity: 0.5;
-}
-.city {
-  text-decoration: none;
-  color: white;
-  font-size: 11pt;
-  font-weight: bold;
-  text-shadow: black 0.1em 0.1em 0.2em;
-}
-.popover-content {
-  min-width: 180px;
-}
-.map {
-	height: 100%;
-	width: 100%;
-}
-.ah {
-	height: 100%;
-}
-.scrolly
-{
-overflow-y: scroll;
-}
-.normalcss
-	  {
-	      background:#E4E4E4;
-	   }
-	   .normalcss a
-	   {
-	       font-family:microsoft yahei,arial;
-	       color:#000000;
-	   }
-	  .clickcss
-	  {
-	      background:#797979;
-	   }
-	   .clickcss a
-	   {
-	       font-family:microsoft yahei,arial;
-	       color:#ffffff;
-	   }
-</style>
+    <title>Overlay example</title>
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+
+    <style>
+        .marker {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #088;
+            border-radius: 10px;
+            background-color: #0FF;
+            opacity: 0.5;
+        }
+
+        .city {
+            text-decoration: none;
+            color: white;
+            font-size: 11pt;
+            font-weight: bold;
+            text-shadow: black 0.1em 0.1em 0.2em;
+        }
+
+        .popover-content {
+            min-width: 180px;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .ah {
+            height: 100%;
+        }
+
+        .scrolly {
+            overflow-y: scroll;
+        }
+
+        .normalcss {
+            background: #E4E4E4;
+        }
+
+        .normalcss a {
+            font-family: microsoft yahei, arial;
+            color: #000000;
+        }
+
+        .clickcss {
+            background: #797979;
+        }
+
+        .clickcss a {
+            font-family: microsoft yahei, arial;
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
 
 <div class="row ah">
-  <div class="col-md-6 ah scrolly">
+    <div class="col-md-6 ah scrolly">
         <div class="col-md-12">
-          <div class="jumbotron">
-            <h1>SatSee服务地图</h1>
-            <h3>我们的SatSee系统已经在全国十多家单位以及国外多个机构上安装运行。这个网页描述了目前已有的用户，以及我们目前正在开展的用户拓展工作。</h3>
-			<p>(这也是和地图一起讲故事(StoryMap)的一个例子，你可以点击文章的任意位置来驱动地图移动，也可以点击地图上的图标来驱动文章重定位)</p>
-          </div>
-          <div class="row">
-            <div onclick="javascript:view.centerOn(ol.proj.transform([87.616, 43.827], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);changecss(this);" class="normalcss">
-              <h2 id="wlmq">新疆维吾尔自治区科技发展战略研究院购置了SatSee系统（点击我看看）</h2>
-              <p></p>
-			  <img src="img/wlmq1.jpg"/><br/><br/>
-            </div><!--/.col-xs-6.col-lg-4-->
-            <div onclick="javascript:view.centerOn(ol.proj.transform([104.894, 11.537], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);changecss(this);" class="normalcss">
-              <h2 id="jinbian">在柬埔寨为吴哥窟管理局安装SatSee系统（点击我看看）</h2>
-			  <h3>RADI and HIST Sign MOU with Cambodian APSARA to Provide China’s Satellite Quicklook Data Service</h3>
-              <p>
-An MOU is signed between the Institute of Remote Sensing and Digital Earth (RADI), Chinese Academy of Sciences (CAS), the International Centre on Space Technologies for Natural and Cultural Heritage under the auspices of UNESCO (HIST), and the Authority for the Protection and Management of Angkor and the Region of Siem Reap (APSARA) on September 9 in Siem Reap for cooperation in the use of Satellite Quicklook data from China. <br/><br/>
-Prof. LIU Jianbo, deputy director of RADI, and Prof. HONG Tianhua, deputy director of HIST, on behalf of RADI and HIST respectively, signed the MOU with Dr. Peou HANG, deputy director of APSARA, Cambodia. The signing ceremony was witnessed by some 30 people including Prof. LI Jinghai, CAS Vice President, Mr. CAO Jinghua, deputy director general of CAS Bureau of International Cooperation, and N. Bun, director general of APSARA. Cambodian Deputy Prime Minister Dr. Sok An met the delegation from CAS on September 10 at the Council of Ministers. He highly praised the cooperation between two sides. <br/><br/>
-According to the MOU, RADI will provide a Virtual Ground Station (SatSee System) and the quicklook data service of two satellites to APSARA. With the help of RADI engineers, the system has been installed on September 5. After being connected via internet, the system has started to receive near real-time, full resolution satellite quicklook images provided by RADI. <br/><br/>
-RADI initiated and developed the SatSee system. It is able to provide users with near real-time, full resolution quicklook images of remote sensing satellite data. SatSee system combines the various advantages that RADI has in the field of satellite remote sensing, including the abundant satellites RADI receives, wide coverage area of its station net, high-speed fiber link between station and processing center, and high computing capacities. <br/><br/>
-The data supported by SatSee now are Chinese HJ-1A, HJ-1B (more will be added soon), USA Landsat-8 and Belgium’s PROBA-V. With more data available and quicker, easier access, this service mode is expected to contribute to emergency monitoring needs such as the monitoring of ecosystem, flood, fire, and oil spill disasters.<br/><br/>
-As the system doesn’t need an antenna to be built on the users’ side, it can be obtained and operated at very low cost, and therefore can be easily promoted and applied in the developing countries. Chinese neighboring countries in Central Asia and South East Asia, over which RADI receiving facilities cover, benefit most. Cambodia is the third country which signed the agreement and benefits from the satellite quicklook data service. Thailand, Mongolia, and Australia also show interest in the system. RADI plans to provide such service to more countries soon. <br/><br/>
+            <div class="jumbotron">
+                <h1>SatSee服务地图</h1>
 
-			  </p>
-			  <img src="img/jpz1.jpg"/><br/><p>The RADI-HIST-APSARA MOU being signed.</p><br/>
-			  <img src="img/jpz2.jpg"/><br/><p>Dr. Sok An meets with CAS delegation.</p><br/>
-            </div><!--/.col-xs-6.col-lg-4-->
-            <div onclick="javascript:view.centerOn(ol.proj.transform([100.5, 13.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);changecss(this);" class="normalcss">
-              <h2 id="bankok">在泰国安装SatSee系统（点击我看看）</h2>
-              <h3>在GISTDA的接收站以及办公总部安装了三套SatseeLive和SatseeOrbit软件，颇受好评。
-			  </h3>
-			  <img src="img/bankok1.jpg"/><br/><br/>
-			  <img src="img/bankok2.jpg"/><br/><br/>
-			  <img src="img/bankok3.jpg"/><br/><br/>
-            </div><!--/.col-xs-6.col-lg-4-->
-            <div onclick="javascript:view.centerOn(ol.proj.transform([85.3, 27.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);changecss(this);" class="normalcss">
-              <h2 id="nepal" >为尼泊尔地震处理国产高分1号数据（点击我看看）</h2>
-                <h3>现在下载整理尼泊尔地震数据集。DigitalGlobe公司提供了地震前和地震后的大量数据，存放在云端。我们小组将下载这些数据，和我们已有的国产卫星数据组织在一起，为后续多星合作的数据处理打好测试数据的基础。
-				</h3>
-				<img src="http://novachen.github.io/images/e.gif"/><br/><br/>
-				<img src="http://novachen.github.io/images/es.jpg"/><br/><br/>
-				<img src="http://novachen.github.io/images/nepal_cut.gif"/><br/><br/>
-            </div><!--/.col-xs-6.col-lg-4-->
-			</div><!--/row-->
-        </div><!--/.col-xs-12.col-sm-9-->  
-  </div>
-  <div class="col-md-6 ah">
-    <div id="map" class="map"><div id="popup"></div></div>
-  </div>
+                <h3>我们的SatSee系统已经在全国十多家单位以及国外多个机构上安装运行。这个网页描述了目前已有的用户，以及我们目前正在开展的用户拓展工作。</h3>
 
-<div style="display: none;" id="mapinfo">
-</div>
+                <p>(这也是和地图一起讲故事(StoryMap)的一个例子，你可以点击文章的任意位置来驱动地图移动，也可以点击地图上的图标来驱动文章重定位)</p>
+            </div>
+            <div class="row">
+                <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([87.616, 43.827]), map.getSize(), half);changecss(this);"
+                     class="normalcss">
+                    <h2 id="wlmq">新疆维吾尔自治区科技发展战略研究院购置了SatSee系统（点击我看看）</h2>
+
+                    <p></p>
+                    <img src="img/wlmq1.jpg"/><br/><br/>
+                </div>
+                <!--/.col-xs-6.col-lg-4-->
+                <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([104.894, 11.537]), map.getSize(), half);changecss(this);"
+                     class="normalcss">
+                    <h2 id="jinbian">在柬埔寨为吴哥窟管理局安装SatSee系统（点击我看看）</h2>
+
+                    <h3>RADI and HIST Sign MOU with Cambodian APSARA to Provide China’s Satellite Quicklook Data
+                        Service</h3>
+
+                    <p>
+                        An MOU is signed between the Institute of Remote Sensing and Digital Earth (RADI), Chinese
+                        Academy of Sciences (CAS), the International Centre on Space Technologies for Natural and
+                        Cultural Heritage under the auspices of UNESCO (HIST), and the Authority for the Protection and
+                        Management of Angkor and the Region of Siem Reap (APSARA) on September 9 in Siem Reap for
+                        cooperation in the use of Satellite Quicklook data from China. <br/><br/>
+                        Prof. LIU Jianbo, deputy director of RADI, and Prof. HONG Tianhua, deputy director of HIST, on
+                        behalf of RADI and HIST respectively, signed the MOU with Dr. Peou HANG, deputy director of
+                        APSARA, Cambodia. The signing ceremony was witnessed by some 30 people including Prof. LI
+                        Jinghai, CAS Vice President, Mr. CAO Jinghua, deputy director general of CAS Bureau of
+                        International Cooperation, and N. Bun, director general of APSARA. Cambodian Deputy Prime
+                        Minister Dr. Sok An met the delegation from CAS on September 10 at the Council of Ministers. He
+                        highly praised the cooperation between two sides. <br/><br/>
+                        According to the MOU, RADI will provide a Virtual Ground Station (SatSee System) and the
+                        quicklook data service of two satellites to APSARA. With the help of RADI engineers, the system
+                        has been installed on September 5. After being connected via internet, the system has started to
+                        receive near real-time, full resolution satellite quicklook images provided by RADI. <br/><br/>
+                        RADI initiated and developed the SatSee system. It is able to provide users with near real-time,
+                        full resolution quicklook images of remote sensing satellite data. SatSee system combines the
+                        various advantages that RADI has in the field of satellite remote sensing, including the
+                        abundant satellites RADI receives, wide coverage area of its station net, high-speed fiber link
+                        between station and processing center, and high computing capacities. <br/><br/>
+                        The data supported by SatSee now are Chinese HJ-1A, HJ-1B (more will be added soon), USA
+                        Landsat-8 and Belgium’s PROBA-V. With more data available and quicker, easier access, this
+                        service mode is expected to contribute to emergency monitoring needs such as the monitoring of
+                        ecosystem, flood, fire, and oil spill disasters.<br/><br/>
+                        As the system doesn’t need an antenna to be built on the users’ side, it can be obtained and
+                        operated at very low cost, and therefore can be easily promoted and applied in the developing
+                        countries. Chinese neighboring countries in Central Asia and South East Asia, over which RADI
+                        receiving facilities cover, benefit most. Cambodia is the third country which signed the
+                        agreement and benefits from the satellite quicklook data service. Thailand, Mongolia, and
+                        Australia also show interest in the system. RADI plans to provide such service to more countries
+                        soon. <br/><br/>
+
+                    </p>
+                    <img src="img/jpz1.jpg"/><br/>
+
+                    <p>The RADI-HIST-APSARA MOU being signed.</p><br/>
+                    <img src="img/jpz2.jpg"/><br/>
+
+                    <p>Dr. Sok An meets with CAS delegation.</p><br/>
+                </div>
+                <!--/.col-xs-6.col-lg-4-->
+                <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([100.5, 13.75]), map.getSize(), half);changecss(this);"
+                     class="normalcss">
+                    <h2 id="bankok">在泰国安装SatSee系统（点击我看看）</h2>
+
+                    <h3>在GISTDA的接收站以及办公总部安装了三套SatseeLive和SatseeOrbit软件，颇受好评。
+                    </h3>
+                    <img src="img/bankok1.jpg"/><br/><br/>
+                    <img src="img/bankok2.jpg"/><br/><br/>
+                    <img src="img/bankok3.jpg"/><br/><br/>
+                </div>
+                <!--/.col-xs-6.col-lg-4-->
+                <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([85.3, 27.75]), map.getSize(), half);changecss(this);"
+                     class="normalcss">
+                    <h2 id="nepal">为尼泊尔地震处理国产高分1号数据（点击我看看）</h2>
+
+                    <h3>
+                        现在下载整理尼泊尔地震数据集。DigitalGlobe公司提供了地震前和地震后的大量数据，存放在云端。我们小组将下载这些数据，和我们已有的国产卫星数据组织在一起，为后续多星合作的数据处理打好测试数据的基础。
+                    </h3>
+                    <img src="http://novachen.github.io/images/e.gif"/><br/><br/>
+                    <img src="http://novachen.github.io/images/es.jpg"/><br/><br/>
+                    <img src="http://novachen.github.io/images/nepal_cut.gif"/><br/><br/>
+                </div>
+                <!--/.col-xs-6.col-lg-4-->
+            </div>
+            <!--/row-->
+        </div>
+        <!--/.col-xs-12.col-sm-9-->
+    </div>
+    <div class="col-md-6 ah">
+        <div id="map" class="map">
+            <div id="popup"></div>
+        </div>
+    </div>
+
+    <div style="display: none;" id="mapinfo">
+    </div>
 
 </div>
 <script type="text/javascript">
     var fields = "曼谷,bankok,100.5,13.75;金边,jinbian,104.894,11.537;加德满都,nepal,85.3,27.75;乌鲁木齐,wlmq,87.616,43.827";
-var layer = new ol.layer.Tile({
-  source: new ol.source.MapQuest({layer: 'sat'})
-});
-var view = new ol.View({
-    center: ol.proj.transform([100, 30], 'EPSG:4326', 'EPSG:3857'),
-	zoom: 5
-});		
-var map = new ol.Map({
-  layers: [layer],
-  target: 'map',
-  view: view
-});
-function changecss(obj) {
-    var d = document.getElementsByClassName('clickcss');
-    for (var i = 0; i < d.length; i++) {
-        d[i].className = "normalcss";
+    var layer = new ol.layer.Tile({
+        source: new ol.source.MapQuest({layer: 'sat'})
+    });
+    var view = new ol.View({
+        center: ol.proj.fromLonLat([100, 30]),
+        zoom: 5
+    });
+    var map = new ol.Map({
+        layers: [layer],
+        target: 'map',
+        view: view
+    });
+    function changecss(obj) {
+        var d = document.getElementsByClassName('clickcss');
+        for (var i = 0; i < d.length; i++) {
+            d[i].className = "normalcss";
+        }
+        obj.className = "clickcss";
     }
-    obj.className = "clickcss";
-}
 
-var maphtml = "";
-var s1 = fields.split(";");
-for (var i = 1; i <= s1.length; i++) {
-    var s2 = s1[i-1].split(",");
-    maphtml += "<a class=\"overlay city\" id=\"city" +i + "\" href=\"#"+s2[1]+"\">" + s2[0] + "</a><div class=\"marker\" id=\"marker" + i + "\" title=\"Marker\"></div>";
-}
-document.getElementById("mapinfo").innerHTML = maphtml;
+    var maphtml = "";
+    var s1 = fields.split(";");
+    for (var i = 1; i <= s1.length; i++) {
+        var s2 = s1[i - 1].split(",");
+        maphtml += "<a class=\"overlay city\" id=\"city" + i + "\" href=\"#" + s2[1] + "\">" + s2[0] + "</a><div class=\"marker\" id=\"marker" + i + "\" title=\"Marker\"></div>";
+    }
+    document.getElementById("mapinfo").innerHTML = maphtml;
 
-for (var i = 1; i <= s1.length; i++) {
-    var s2 = s1[i-1].split(",");
-    var a = new Array(parseFloat(s2[2]),parseFloat(s2[3]));
-    var pos = ol.proj.fromLonLat(a);
-    var marker = new ol.Overlay({
-        position: pos,
-        positioning: 'center-center',
-        element: document.getElementById('marker' + i),
-        stopEvent: false
-    });
-    map.addOverlay(marker);
-}
-for (var i = 1; i <= s1.length; i++) {
-    var s2 = s1[i-1].split(",");
-    var a = new Array(parseFloat(s2[2]), parseFloat(s2[3]));
-    var pos = ol.proj.fromLonLat(a);
-    var city = new ol.Overlay({
-        position: pos,
-        element: document.getElementById('city' + i)
-    });
-    map.addOverlay(city);
-}
-size = map.getSize();
-half = [size[0] / 2, size[1] / 2];
+    for (var i = 1; i <= s1.length; i++) {
+        var s2 = s1[i - 1].split(",");
+        var a = new Array(parseFloat(s2[2]), parseFloat(s2[3]));
+        var pos = ol.proj.fromLonLat(a);
+        var marker = new ol.Overlay({
+            position: pos,
+            positioning: 'center-center',
+            element: document.getElementById('marker' + i),
+            stopEvent: false
+        });
+        map.addOverlay(marker);
+    }
+    for (var i = 1; i <= s1.length; i++) {
+        var s2 = s1[i - 1].split(",");
+        var a = new Array(parseFloat(s2[2]), parseFloat(s2[3]));
+        var pos = ol.proj.fromLonLat(a);
+        var city = new ol.Overlay({
+            position: pos,
+            element: document.getElementById('city' + i)
+        });
+        map.addOverlay(city);
+    }
+    size = map.getSize();
+    half = [size[0] / 2, size[1] / 2];
 </script>
 </body>
 </html>
