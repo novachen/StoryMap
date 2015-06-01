@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>新疆阿克陶冰川移动(canvas)</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+    <div class="col-md-3 ah">
+	
+<h1>公格尔九别峰冰川移动</h1>
+
+<img src="http://i0.sinaimg.cn/dy/c/2015-05-16/U11347P1T1D31840323F23DT20150516155853.jpg"/> <br/><br/>
+<p>
+中新网阿克陶5月15日电 (记者 朱景朝) 15日，记者从新疆克孜勒苏柯尔克孜自治州阿克陶县政府了解到，近日，该县境内的公格尔九别峰发生冰川移动，造成当地1.5万亩草场消失，70户牧民房屋受损。<br/><br/>
+
+
+　　阿克陶县政府办公室负责人15日告诉中新网记者，5月5日，阿克陶县布伦口乡接到牧民反映，由于冰川移动山体滑坡山下的房屋被埋，乡政府和驻村工作组派出工作人员前去了解情况。11日，县政府负责人率专家上山考察进一步了解情况，发现公格尔九别峰冰川移动超过20公里，造成当地1.5万亩草场消失，70户牧民房屋受损。<br/><br/>
+
+　　据了解，首先发现冰川移动的是阿克陶县布伦口乡盖孜村牧民吐尔达力·艾克热木。5日，他放牧归来，发现自己的家不见了，附近的草场全部被山石掩埋，便向乡政府反映情况。<br/><br/>
+
+　　新疆地矿局第二水文地质大队总工程师冯志远说，造成冰川移动的主要原因是全球气候变暖。<br/><br/>
+
+　　阿克陶县政府办公室负责人表示，牧民的安置工作正在进行。今日县政府领导与新疆专家再次上山了解情况，预计今晚返回县城，随后会公布最新进展。<br/><br/>
+
+　　公格尔九别峰是西昆仑山脉上的第二高峰，由于山上终年积雪，犹如牧民头上所戴的帽子，所以当地牧民就称它为“公格尔九别”，语意为“白色的帽子”；公格尔山地区山势险峻，海拔7000多米，冰川规模与冰川地貌都很发育。(完)<br/><br/>
+
+</p>	
+	</div>
+	
+    <div class="col-md-9 ah">
+        <div class="col-md-6 ah">
+            <div id="map" class="map"></div>
+        </div>
+        <div class="col-md-6 ah">
+            <div class="row hh">
+                <div id="map2" class="map"></div>
+            </div>
+            <div class="row hh">
+                <div id="map3" class="map"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var extent = [0, 0, 4000, 4000];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+
+    source1 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【4月29日 冰川移动前】'
+            })
+        ],
+        url: 'img/s119.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+    source2 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【5月15日 冰川移动后】'
+            })
+        ],
+        url: 'img/s135.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+
+    layer1 = new ol.layer.Image({
+        source: source1
+    });
+
+    layer2 = new ol.layer.Image({
+        source: source2
+    });
+
+    layer10 = new ol.layer.Image({
+        source: source1
+    });
+
+    layer20 = new ol.layer.Image({
+        source: source2
+    });
+
+    view = new ol.View({
+        projection: projection,
+        center: ol.extent.getCenter(extent),
+        zoom: 2
+    });
+
+    var map = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer1,
+                    layer2
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map',
+        view: view
+    });
+
+    var map2 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer10
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map2',
+        view: view
+    });
+
+    var map3 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer20
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map3',
+        view: view
+    });
+
+    function bindInputs(layerid, layer) {
+        var visibilityInput = $(layerid + ' input.visible');
+        visibilityInput.on('change', function () {
+            layer.setVisible(this.checked);
+        });
+        visibilityInput.prop('checked', layer.getVisible());
+
+        $.each(['opacity', 'hue', 'saturation', 'contrast', 'brightness'],
+                function (i, v) {
+                    var input = $(layerid + ' input.' + v);
+                    input.on('input change', function () {
+                        layer.set(v, parseFloat(this.value));
+                    });
+                    input.val(String(layer.get(v)));
+                }
+        );
+    }
+    map.getLayers().forEach(function (layer, i) {
+        bindInputs('#layer' + i, layer);
+        if (layer instanceof ol.layer.Group) {
+            layer.getLayers().forEach(function (sublayer, j) {
+                bindInputs('#layer' + i + j, sublayer);
+            });
+        }
+    });
+
+    $('#layertree li > span').click(function () {
+        $(this).siblings('fieldset').toggle();
+    });
+
+    setInterval('flickImage()', 1000);
+
+    function flickImage() {
+//        console.log(layer2.getVisible());
+        layer2.setVisible(!layer2.getVisible());
+        var visibilityInput = $('#layer01' + ' input.visible');
+        visibilityInput.prop('checked', layer2.getVisible());
+    }
+
+</script>
+</body>
+</html>
