@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
 
-    <title>Overlay example</title>
+    <title>Satsee用户地图</title>
 
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -83,10 +83,34 @@
                 <p>(这也是和地图一起讲故事(StoryMap)的一个例子，你可以点击文章的任意位置来驱动地图移动，也可以点击地图上的图标来驱动文章重定位)</p>
             </div>
             <div class="row">
+
+			<div onclick="javascript:view.centerOn(ol.proj.fromLonLat([121.473,31.227]), map.getSize(), half);changecss(this);"
+                     class="normalcss">
+                    <h2 id="shanghai">中国科学院上海技术物理研究所</h2>
+					<h3>技物所是很多国产卫星上传感器的生成商</h3>
+                    <p>
+                    </p>
+
+                    <img src="http://www.sitp.cas.cn/xwzx/kydt/201505/W020150511327495587087.jpg"/><br/>
+
+                </div>
+			
+			
+                <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([113.264,23.127]), map.getSize(), half);changecss(this);"
+                     class="normalcss">
+                    <h2 id="guangzhou">广州中国海洋局南海分局</h2>
+					<h3>用户希望通过Satsee系统更及时的获取南海周边的卫星数据</h3>
+                    <p>
+                    </p>
+
+                    <img src="img/nhfj1.jpg"/><br/>
+
+                </div>
+
                 <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([74.618,42.870]), map.getSize(), half);changecss(this);"
                      class="normalcss">
                     <h2 id="jejst">吉尔吉斯坦比什凯克</h2>
-
+					<h3>吉尔吉斯斯坦物理与技术研究院</h3>
                     <p>
                     </p>
 
@@ -97,7 +121,7 @@
                 <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([106.917,47.92]), map.getSize(), half);changecss(this);"
                      class="normalcss">
                     <h2 id="wlbt">赴蒙古乌兰巴托</h2>
-
+					<h3>蒙古环境信息中心</h3>
                     <p>
                     </p>
 
@@ -107,7 +131,7 @@
 
                 <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([4.349,50.845]), map.getSize(), half);changecss(this);"
                      class="normalcss">
-                    <h2 id="blse">和比利时VITO签订合作协议交换数据</h2>
+                    <h2 id="blse">和比利时VITO公司签订合作协议交换数据</h2>
 
                     <h3>RADI Signs MOU with VITO for Cooperation on Satellite Quicklook Data</h3>
 
@@ -220,7 +244,7 @@ HJ-1A and HJ-1B are Chinese small satellites with 30 m resolution and 720 km swa
 
 </div>
 <script type="text/javascript">
-    var fields = "泰国曼谷,bankok,100.5,13.75;柬埔寨暹粒,jinbian,104.894,11.537;乌鲁木齐,wlmq,87.616,43.827;比利时布鲁塞尔,blse,4.349,50.845;蒙古乌兰巴托,wlbt,106.917,47.92;吉尔吉斯坦,jejst,74.618,42.870;北京,beijing,116.405,39.901";
+    var fields = "泰国曼谷,bankok,100.5,13.75;柬埔寨暹粒,jinbian,104.894,11.537;乌鲁木齐,wlmq,87.616,43.827;比利时布鲁塞尔,blse,4.349,50.845;蒙古乌兰巴托,wlbt,106.917,47.92;吉尔吉斯坦,jejst,74.618,42.870;北京,beijing,116.405,39.901;广州,guangzhou,113.264,23.127;上海,shanghai,121.473,31.227";
     var layer = new ol.layer.Tile({
         source: new ol.source.MapQuest({layer: 'sat'})
     });
