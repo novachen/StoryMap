@@ -196,7 +196,15 @@ HJ-1A and HJ-1B are Chinese small satellites with 30 m resolution and 720 km swa
                     <img src="img/bankok2.jpg"/><br/><br/>
                     <img src="img/bankok3.jpg"/><br/><br/>
                 </div>
-            </div>
+				
+                 <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([116.405,39.901]), map.getSize(), half);changecss(this);"
+                     class="normalcss">
+                    <h2 id="beijing">国家遥感中心</h2>
+
+                    <img src="img/gjygzx1.jpg"/><br/><br/>
+                </div>
+				
+			</div>
             <!--/row-->
         </div>
         <!--/.col-xs-12.col-sm-9-->
@@ -212,7 +220,7 @@ HJ-1A and HJ-1B are Chinese small satellites with 30 m resolution and 720 km swa
 
 </div>
 <script type="text/javascript">
-    var fields = "泰国曼谷,bankok,100.5,13.75;柬埔寨金边,jinbian,104.894,11.537;乌鲁木齐,wlmq,87.616,43.827;比利时布鲁塞尔,blse,4.349,50.845;蒙古乌兰巴托,wlbt,106.917,47.92;吉尔吉斯坦,jejst,74.618,42.870";
+    var fields = "泰国曼谷,bankok,100.5,13.75;柬埔寨暹粒,jinbian,104.894,11.537;乌鲁木齐,wlmq,87.616,43.827;比利时布鲁塞尔,blse,4.349,50.845;蒙古乌兰巴托,wlbt,106.917,47.92;吉尔吉斯坦,jejst,74.618,42.870;北京,beijing,116.405,39.901";
     var layer = new ol.layer.Tile({
         source: new ol.source.MapQuest({layer: 'sat'})
     });
