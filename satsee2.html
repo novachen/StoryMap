@@ -83,6 +83,51 @@
                 <p>(这也是和地图一起讲故事(StoryMap)的一个例子，你可以点击文章的任意位置来驱动地图移动，也可以点击地图上的图标来驱动文章重定位)</p>
             </div>
             <div class="row">
+                <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([74.618,42.870]), map.getSize(), half);changecss(this);"
+                     class="normalcss">
+                    <h2 id="jejst">吉尔吉斯坦比什凯克</h2>
+
+                    <p>
+                    </p>
+
+                    <img src="img/jejst1.jpg"/><br/>
+
+                </div>
+
+                <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([106.917,47.92]), map.getSize(), half);changecss(this);"
+                     class="normalcss">
+                    <h2 id="wlbt">赴蒙古乌兰巴托</h2>
+
+                    <p>
+                    </p>
+
+                    <img src="img/mg1.jpg"/><br/>
+
+                </div>
+
+                <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([4.349,50.845]), map.getSize(), half);changecss(this);"
+                     class="normalcss">
+                    <h2 id="blse">和比利时VITO签订合作协议交换数据</h2>
+
+                    <h3>RADI Signs MOU with VITO for Cooperation on Satellite Quicklook Data</h3>
+
+                    <p>
+An MoU is signed between Institute of Remote Sensing and Digital Earth (RADI), Chinese Academy of Sciences (CAS) and Institute of Vision on Technology (VITO), Belgium on April 29 in Mol, Belgium for satellite quicklook data exchange cooperation.<br/><br/>
+Prof. Liu Jianbo, Deputy Director of RADI signed the MoU on behalf of RADI with Prof. Dirk Fransaer, Managing Director of VITO during his visit to Belgium from April 27-30. <br/><br/>
+According to the MoU, RADI will provide a Virtual Ground Station (SatSee System), along with three satellites quicklook data service, to VITO, and VITO will provide PROBA-V satellite quicklook data to RADI.  <br/><br/>
+RADI initiated and developed a system called SatSee. It is able to provide users with near real-time, full resolution quicklook images of remote sensing satellite data. SatSee system combines the various advantages that RADI has in the field of satellite remote sensing, including the abundant satellites RADI receives, wide coverage area of its station net, high-speed fiber link between station and processing center, and high computing capacities. The data supported by SatSee now are Chinese HJ-1A, HJ-1B (more will be added soon) and USA Landsat-8. Through the quicklook data exchange, RADI and VITO can not only quickly access satellite data from each other, but also get the satellite data promoted to third party through SatSee quicklook data service. With more data available and quicker, easier access, this service mode is expected to contribute to some emergency monitoring needs.  <br/><br/>
+PROBA-V is a small satellite initiated by ESA and Belspo, with 100 m resolution at nadir, 350 m on full field of view, bands specially designed for vegetation monitoring. VITO is responsible for its data processing and user segment operation. <br/><br/>
+HJ-1A and HJ-1B are Chinese small satellites with 30 m resolution and 720 km swath. <br/><br/>
+                    </p>
+
+                    <img src="http://english.radi.cas.cn/News/PN/201405/W020140504322520016341.jpg"/><br/>
+                    <p>The RADI-VITO MoU being signed.</p><br/>
+
+                    <img src="http://english.radi.cas.cn/News/PN/201405/W020140504322524396615.jpg"/><br/>
+                    <p>The SatSee system displaying PROBA-V satellite quicklook in VITO</p><br/>
+
+                </div>
+			
                 <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([87.616, 43.827]), map.getSize(), half);changecss(this);"
                      class="normalcss">
                     <h2 id="wlmq">新疆维吾尔自治区科技发展战略研究院购置了SatSee系统（点击我看看）</h2>
@@ -151,19 +196,6 @@
                     <img src="img/bankok2.jpg"/><br/><br/>
                     <img src="img/bankok3.jpg"/><br/><br/>
                 </div>
-                <!--/.col-xs-6.col-lg-4-->
-                <div onclick="javascript:view.centerOn(ol.proj.fromLonLat([85.3, 27.75]), map.getSize(), half);changecss(this);"
-                     class="normalcss">
-                    <h2 id="nepal">为尼泊尔地震处理国产高分1号数据（点击我看看）</h2>
-
-                    <h3>
-                        现在下载整理尼泊尔地震数据集。DigitalGlobe公司提供了地震前和地震后的大量数据，存放在云端。我们小组将下载这些数据，和我们已有的国产卫星数据组织在一起，为后续多星合作的数据处理打好测试数据的基础。
-                    </h3>
-                    <img src="http://novachen.github.io/images/e.gif"/><br/><br/>
-                    <img src="http://novachen.github.io/images/es.jpg"/><br/><br/>
-                    <img src="http://novachen.github.io/images/nepal_cut.gif"/><br/><br/>
-                </div>
-                <!--/.col-xs-6.col-lg-4-->
             </div>
             <!--/row-->
         </div>
@@ -180,7 +212,7 @@
 
 </div>
 <script type="text/javascript">
-    var fields = "曼谷,bankok,100.5,13.75;金边,jinbian,104.894,11.537;加德满都,nepal,85.3,27.75;乌鲁木齐,wlmq,87.616,43.827";
+    var fields = "泰国曼谷,bankok,100.5,13.75;柬埔寨金边,jinbian,104.894,11.537;乌鲁木齐,wlmq,87.616,43.827;比利时布鲁塞尔,blse,4.349,50.845;蒙古乌兰巴托,wlbt,106.917,47.92;吉尔吉斯坦,jejst,74.618,42.870";
     var layer = new ol.layer.Tile({
         source: new ol.source.MapQuest({layer: 'sat'})
     });
