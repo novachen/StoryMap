@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
 
-    <title>尼泊尔地震（四视图webgl）</title>
+    <title>尼泊尔地震（四视图）</title>
 
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -108,57 +108,62 @@
         extent: extent
     });
 
+    source1 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【4月11日 地震前】'
+            })
+        ],
+        url: 'http://novachen.github.io/images/e0411.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+    source2 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【4月27日 地震后】'
+            })
+        ],
+        url: 'http://novachen.github.io/images/e0427.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+
+	sourceChange = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【变化检测】'
+            })
+        ],
+        url: 'http://novachen.github.io/images/change.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+	
+	
     layer1 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0411.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source1
     });
 
     layer2 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0427.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source2
     });
+
     layer10 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0411.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source1
     });
 
     layer20 = new ol.layer.Image({
-        source: new ol.source.ImageStatic({
-            attributions: [
-                new ol.Attribution({
-                    html: '&copy; novachen</a>'
-                })
-            ],
-            url: 'http://novachen.github.io/images/e0427.jpg',
-            projection: projection,
-            imageExtent: extent
-        })
+        source: source2
     });
-    view = new ol.View({
+
+    layerChange = new ol.layer.Image({
+        source: sourceChange
+    });
+
+	view = new ol.View({
         projection: projection,
         center: ol.extent.getCenter(extent),
         zoom: 2
@@ -207,6 +212,20 @@
         view: view
     });
 
+    var map3 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layerChange
+                ]
+
+            })
+        ],
+        renderer: 'webgl',
+        target: 'map4',
+        view: view
+    });
+
     function bindInputs(layerid, layer) {
         var visibilityInput = $(layerid + ' input.visible');
         visibilityInput.on('change', function () {
@@ -240,7 +259,7 @@
     setInterval('flickImage()', 1000);
 
     function flickImage() {
-        console.log(layer2.getVisible());
+//        console.log(layer2.getVisible());
         layer2.setVisible(!layer2.getVisible());
         var visibilityInput = $('#layer01' + ' input.visible');
         visibilityInput.prop('checked', layer2.getVisible());

@@ -131,6 +131,18 @@
     });
 
 
+	sourceChange = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【变化检测】'
+            })
+        ],
+        url: 'http://novachen.github.io/images/change.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+	
+	
     layer1 = new ol.layer.Image({
         source: source1
     });
@@ -147,7 +159,11 @@
         source: source2
     });
 
-    view = new ol.View({
+    layerChange = new ol.layer.Image({
+        source: sourceChange
+    });
+
+	view = new ol.View({
         projection: projection,
         center: ol.extent.getCenter(extent),
         zoom: 2
@@ -193,6 +209,20 @@
         ],
         renderer: 'canvas',
         target: 'map3',
+        view: view
+    });
+
+    var map3 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layerChange
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map4',
         view: view
     });
 
