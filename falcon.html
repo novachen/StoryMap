@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>那些年-那些人-那些花-那些草</title>
+
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="js/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+
+    <style>
+        .marker {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #088;
+            border-radius: 10px;
+            background-color: #0FF;
+            opacity: 0.5;
+        }
+
+        .city {
+            text-decoration: none;
+            color: white;
+            font-size: 11pt;
+            font-weight: bold;
+            text-shadow: black 0.1em 0.1em 0.2em;
+        }
+
+        .popover-content {
+            min-width: 180px;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .ah {
+            height: 100%;
+        }
+
+        .scrolly {
+            overflow-y: auto;
+        }
+
+        .normalcss {
+            background: #EEE;
+        }
+
+        .clickcss {
+            background: #EEE;
+        }
+
+		.hgh
+		{
+			height="100px";
+		}
+		
+		.cen
+		{
+			text-align: center;
+		}
+		
+		.box
+		{
+			background-color: #fff;
+		}
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+    <div class="col-md-8 ah scrolly">
+        <div class="col-md-12">
+            <div class="row normalcss">
+                <h1>那些年-那些人-那些花-那些草</h1>
+
+                <h3>我们的FALCON处理系统在NEPAL地震中高质量的处理了GF1的数据，形成了无云的地图产品、变化检测产品，效果甚佳令人满意。我们流程基本上使用自动化的方式，很少的人工工作量。
+				这项工作是多位青年才俊数年来孜孜不倦的工作，不断累积、不断加成的结果。</h3>
+				<h3>又到了一年一度送走毕业生的时候了，让我们缅怀他们的勤勉工作，激励后来者将伟大的事业推向更高峰。</h3>
+            </div>
+			<br/>
+            <div id="lifangjun" class="row normalcss">
+                <h1>李芳军</h1>
+                <h3>目前在美国攻读博士学位，前景看好，过几年就能回来当百人当教授啦。并且在2015年成为一位幸福的父亲，一位美国公民的父亲。</h3>
+				<img src="img/lfj1.jpg"/><br/>
+				<img src="img/lfj2.jpg"/><br/>
+            </div>
+			<br/>
+            <div id="guizhengke" class="row normalcss">
+                <h1>桂正科</h1>
+                <h3>目前正妇唱夫随地回到离家很近的成都，在阿里巴巴小微贷款公司工作，领着北京的薪水过着悠闲自在的生活。</h3>
+				<img src="img/gzk1.jpg"/><br/>
+				<img src="img/gzk2.jpg"/><br/>
+            </div>
+			<br/>	
+            <div id="liulu" class="row normalcss">
+                <h1>刘璐</h1>
+                <h3>刚毕业一年，目前在离单位不远的软件园ORACLE公司里，乐此不疲的当着“恐龙医生”，为UNIX系统看病找茬。</h3>
+				<img src="img/ll1.jpg"/><br/>
+				<img src="img/ll2.jpg"/><br/>
+            </div>
+
+		</div>
+        <!--/.col-xs-12.col-sm-9-->
+    </div>
+    <div class="col-md-4 ah scrolly">
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>MS和PAN</h1>
+			</div>
+			<div class="col-md-6 box">
+				<h3>光学遥感卫星通常使用MS/PAN组合方式在光谱分辨率和空间分辨率之间取得平衡。</h3>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>|</h1>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>波段间配准</h1>
+				<h3><a href="#liulu">刘璐</a><h3>
+			</div>
+			<div class="col-md-6 box">
+				<h3>MS/PAN之间通常存在着几何误差，通过全自动光流场方法将原来MS/PAN之间的误差逼近到亚像元的级别。</h3>
+			</div>
+		</div>
+		
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>|</h1>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>图像复原</h1>
+				<h3><a href="#lifangjun">李芳军</a><h3>
+			</div>
+			<div class="col-md-6 box">
+				<h3>MS/PAN之间通常多种关系，特别是纹理之间存在着很强的相关性。</h3>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>|</h1>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>多时相配准</h1>
+				<h3>何阳<h3>
+			</div>
+			<div class="col-md-6 box">
+				<h3>通过“RPC校正->特征点校正->像素级校正”三个连续的步骤，自动地实现高精度的配准。</h3>
+			</div>
+		</div>
+		
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>|</h1>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>相对辐射校正</h1>
+				<h3>马勇<h3>
+			</div>
+			<div class="col-md-6 box">
+				<h3>通过多时相之间的变化分析，将变化小的区域的辐射调整一致。</h3>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>|</h1>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>削减雾霾</h1>
+				<h3>刘泽树<h3>
+			</div>
+			<div class="col-md-6 box">
+				<h3>在云雾作用下蓝色波段和红色波段响应有区别可以用来估算云雾厚度，提出只用RGB和近红外四个波段削减雾霾的方法。</h3>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>|</h1>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>去除厚云</h1>
+				<h3><a href="#guizhengke">桂正科</a><h3>
+			</div>
+			<div class="col-md-6 box">
+				<h3>通过多时相的相似性仿真，将多张有云的图像合成成无云的图像。</h3>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>|</h1>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>无饱和增强制图</h1>
+				<h3><a href="#lifangjun">李芳军</a><h3>
+			</div>
+			<div class="col-md-6 box">
+				<h3>高分辨图像的直方图存在严重的肥尾现象，通过局部优化的直方图调整保证亮区的纹理不会饱和。</h3>
+			</div>
+		</div>
+	
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>|</h1>
+			</div>
+		</div>
+
+		<div class="row hgh">
+			<div class="col-md-6 cen box">
+				<h1>变化检测甄别</h1>
+				<h3>马勇<h3>
+			</div>
+			<div class="col-md-6 box">
+				<h3>通过变化检测算法，快速定位出疑似变化的区域。</h3>
+			</div>
+		</div>
+
+	</div>
+
+
+</div>
+
+<script type="text/javascript">
+    
+</script>
+</body>
+</html>
