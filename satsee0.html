@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+	
+<title>Vector Icon Example</title>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+    
+	<link href="css/offcanvas.css" rel="stylesheet">
+	
+<style>
+#popup {
+  padding-bottom: 45px;
+}
+.map {
+	height: 100%;
+	width: 100%;
+}
+.ah {
+	height: 100%;
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="row ah">
+  <div class="col-md-6 ah">
+        <div class="col-md-12 scrolly">
+          <div class="jumbotron">
+            <h1>SatSee服务地图</h1>
+            <h3></h3>
+          </div>
+          <div class="row">
+            <div onclick="javascript:view.centerOn(ol.proj.transform([100.5, 13.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);">
+              <h2 id="bankok"">在泰国安装SatSee系统（点击我看看）</h2>
+              <p>在GISTDA的接收站以及办公总部安装了三套SatseeLive和SatseeOrbit软件，颇受好评。</p>
+              <p><a class="btn btn-default" href="" role="button">View details »</a></p>
+            </div><!--/.col-xs-6.col-lg-4-->
+            <div onclick="javascript:view.centerOn(ol.proj.transform([85.3, 27.75], 'EPSG:4326', 'EPSG:3857'), map.getSize(), half);">
+              <h2 id="nepal" >为尼泊尔地震处理国产高分1号数据（点击我看看）</h2>
+                <p>现在下载整理尼泊尔地震数据集。DigitalGlobe公司提供了地震前和地震后的大量数据，存放在云端。我们小组将下载这些数据，和我们已有的国产卫星数据组织在一起，为后续多星合作的数据处理打好测试数据的基础。</p>
+                <p><a class="btn btn-default" href="" role="button">View details »</a></p>
+            </div><!--/.col-xs-6.col-lg-4-->
+			</div><!--/row-->
+        </div><!--/.col-xs-12.col-sm-9-->  
+  </div>
+  <div class="col-md-6 ah">
+    <div id="map" class="map"><div id="popup"></div></div>
+  </div>
+</div>
+
+<script>
+
+var iconFeature1 = new ol.Feature({
+  geometry: new ol.geom.Point(ol.proj.transform([100.5, 13.75], 'EPSG:4326', 'EPSG:3857')),
+  name: '曼谷',
+  population: 4000,
+  rainfall: 500
+});
+
+var iconFeature2 = new ol.Feature({
+  geometry: new ol.geom.Point(ol.proj.transform([85.3, 27.75], 'EPSG:4326', 'EPSG:3857')),
+  name: '加德满都',
+  population: 4000,
+  rainfall: 500
+});
+
+var iconStyle = new ol.style.Style({
+  image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+    anchor: [0.5, 46],
+    anchorXUnits: 'fraction',
+    anchorYUnits: 'pixels',
+    opacity: 0.75,
+    src: 'http://openlayers.org/en/v3.5.0/examples/data/icon.png'
+  }))
+});
+
+iconFeature1.setStyle(iconStyle);
+iconFeature2.setStyle(iconStyle);
+
+var vectorSource = new ol.source.Vector({
+  features: [iconFeature1, iconFeature2]
+});
+
+var vectorLayer = new ol.layer.Vector({
+  source: vectorSource
+});
+
+var rasterLayer = new ol.layer.Tile({
+  source: new ol.source.TileJSON({
+    url: 'http://api.tiles.mapbox.com/v3/mapbox.geography-class.jsonp',
+    crossOrigin: ''
+  })
+});
+
+var view = new ol.View({
+	center: ol.proj.transform([100, 40], 'EPSG:4326', 'EPSG:3857'),
+	zoom: 4
+});
+
+var map = new ol.Map({
+  layers: [rasterLayer, vectorLayer],
+  target: document.getElementById('map'),
+  view: view
+});
+
+var element = document.getElementById('popup');
+
+var popup = new ol.Overlay({
+  element: element,
+  positioning: 'bottom-center',
+  stopEvent: false
+});
+map.addOverlay(popup);
+
+// display popup on click
+map.on('click', function(evt) {
+  var feature = map.forEachFeatureAtPixel(evt.pixel,
+      function(feature, layer) {
+        return feature;
+      });
+  if (feature) {
+    var geometry = feature.getGeometry();
+    var coord = geometry.getCoordinates();
+    popup.setPosition(coord);
+    $(element).popover({
+      'placement': 'top',
+      'html': true,
+      'content': feature.get('name')
+    });
+    $(element).popover('show');
+  } else {
+    $(element).popover('destroy');
+  }
+});
+
+// change mouse cursor when over marker
+map.on('pointermove', function(e) {
+  if (e.dragging) {
+    $(element).popover('destroy');
+    return;
+  }
+  var pixel = map.getEventPixel(e.originalEvent);
+  var hit = map.hasFeatureAtPixel(pixel);
+  map.getTarget().style.cursor = hit ? 'pointer' : '';
+});
+
+        size =map.getSize();
+        half = [size[0]/2, size[1]/2];
+</script>
+</body>
+</html>
