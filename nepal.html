@@ -38,7 +38,7 @@
 <body>
 
 <div class="row ah">
-    <div class="col-md-10 ah">
+    <div class="col-md-12 ah">
         <div class="row hh">
             <div class="col-md-6 ah">
                 <div id="map" class="map"></div>
@@ -55,48 +55,6 @@
                 <div id="map4" class="map"></div>
             </div>
         </div>
-    </div>
-    <div id="layertree" class="col-md-2 ah">
-        <h5>Click on layer nodes below to change their properties.</h5>
-        <ul>
-            <li><span>Layer group</span>
-                <fieldset id="layer0">
-                    <label class="checkbox" for="visible1">
-                        <input id="visible1" class="visible" type="checkbox"/>visibility
-                    </label>
-                    <label>opacity</label>
-                    <input class="opacity" type="range" min="0" max="1" step="0.01"/>
-                    <label>hue</label>
-                    <input class="hue" type="range" min="-3.141592653589793" max="3.141592653589793" step="0.01"/>
-                    <label>saturation</label>
-                    <input class="saturation" type="range" min="0" max="5" step="0.01"/>
-                    <label>contrast</label>
-                    <input class="contrast" type="range" min="0" max="2" step="0.01"/>
-                    <label>brightness</label>
-                    <input class="brightness" type="range" min="-1" max="1" step="0.01"/>
-                </fieldset>
-                <ul>
-                    <li><span>04-11 地震前</span>
-                        <fieldset id="layer00">
-                            <label class="checkbox" for="visible10">
-                                <input id="visible10" class="visible" type="checkbox"/>visibility
-                            </label>
-                            <label>opacity</label>
-                            <input class="opacity" type="range" min="0" max="1" step="0.01"/>
-                        </fieldset>
-                    </li>
-                    <li><span>04-27 地震后（04-25地震日）</span>
-                        <fieldset id="layer01">
-                            <label class="checkbox" for="visible11">
-                                <input id="visible11" class="visible" type="checkbox"/>visibility
-                            </label>
-                            <label>opacity</label>
-                            <input class="opacity" type="range" min="0" max="1" step="0.01"/>
-                        </fieldset>
-                    </li>
-                </ul>
-            </li>
-        </ul>
     </div>
 </div>
 
@@ -166,7 +124,7 @@
 	view = new ol.View({
         projection: projection,
         center: ol.extent.getCenter(extent),
-        zoom: 2
+        zoom: 3
     });
 
     var map = new ol.Map({
