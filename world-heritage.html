@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>geojson</title>
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="js/ol.js"></script>
+
+
+</head>
+<body>
+
+<div class="col-md-9">
+    <div>
+        <div id="map" class="map"></div>
+    </div>
+</div>
+
+<div id="info" class="col-md-3">
+    &nbsp;
+</div>
+
+<script>
+    var threshold = 50000;
+
+    var style = new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: 'rgba(255, 255, 255, 0.6)'
+        }),
+        stroke: new ol.style.Stroke({
+            color: '#319FD3',
+            width: 1
+        }),
+        text: new ol.style.Text({
+            font: '12px Calibri,sans-serif',
+            fill: new ol.style.Fill({
+                color: '#000'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 3
+            })
+        })
+    });
+    var styles = [style];
+
+    var vectorLayer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: 'test.json',
+            format: new ol.format.GeoJSON()
+        }),
+        style: function (feature, resolution) {
+            style.getText().setText(resolution < threshold ? feature.get('name') : '');
+            return styles;
+        }
+    });
+
+    var view = new ol.View({
+        center: ol.proj.fromLonLat([0, 45]),
+        zoom: 5,
+        minZoom: 3,
+        maxZoom: 19
+    })
+
+    var map = new ol.Map({
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.BingMaps({
+                    imagerySet: 'Aerial',
+                    key: 'Ak-dzM4wZjSqTlzveKz5u0d4IQ4bRzVI309GxmkgSVr1ewS6iPSrOvOKhA-CJlm3'
+                })
+            }),
+            vectorLayer
+        ],
+        target: 'map',
+        view: view
+    });
+
+    var highlightStyleCache = {};
+
+    var featureOverlay = new ol.FeatureOverlay({
+        map: map,
+        style: function (feature, resolution) {
+            var text = resolution < threshold ? feature.get('name') : '';
+            if (!highlightStyleCache[text]) {
+                highlightStyleCache[text] = [new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: '#f00',
+                        width: 1
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255,0,0,0.1)'
+                    }),
+                    text: new ol.style.Text({
+                        font: '12px Calibri,sans-serif',
+                        text: text,
+                        fill: new ol.style.Fill({
+                            color: '#000'
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: '#f00',
+                            width: 3
+                        })
+                    })
+                })];
+            }
+            return highlightStyleCache[text];
+        }
+    });
+
+    var highlight;
+    var displayFeatureInfo = function (pixel) {
+
+        var feature = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+            return feature;
+        });
+
+        var info = document.getElementById('info');
+
+
+
+        if (feature !== highlight) {
+            if (highlight) {
+                featureOverlay.removeFeature(highlight);
+            }
+            if (feature) {
+                featureOverlay.addFeature(feature);
+            }
+            highlight = feature;
+
+            if (feature) {
+                info.innerHTML =
+                        '<table><tr><td height="100px">' +
+                        '<img src="' + feature.get('icon') + '"/>' +
+                        '</td><td>' +
+                        '<h2>' + feature.get('name') + '</h2>' +
+                        '</td></tr></table><br/>' +
+                        feature.get('short') + '<br/>' +
+                        '<img src="' + feature.get('img') + '" width="100%"/><br/>';
+            } else {
+                //info.innerHTML = '&nbsp;';
+            }
+        }
+
+    };
+
+    var focus = function (pixel) {
+
+        var feature = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+            return feature;
+        });
+
+        if (feature) {
+            geo = feature.getGeometry();
+            pos = geo.getFirstCoordinate();
+            view.setCenter(pos);
+            view.setZoom(feature.get('zoom'));
+        }
+    };
+
+    map.on('pointermove', function (evt) {
+        if (evt.dragging) {
+            return;
+        }
+        var pixel = map.getEventPixel(evt.originalEvent);
+        displayFeatureInfo(pixel);
+    });
+
+    map.on('click', function (evt) {
+        var pixel = map.getEventPixel(evt.originalEvent);
+        focus(pixel);
+    });
+
+</script>
+</body>
+</html>
