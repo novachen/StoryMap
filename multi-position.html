@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>世界自然文化遗产</title>
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="js/ol.js"></script>
+
+    <style>
+        .map {
+            height: 256px;
+            width: 512px;
+        }
+    </style>
+
+</head>
+<body>
+
+
+<table>
+    <tr>
+
+        <td id="map1" class="map"></td>
+        <td id="map2" class="map"></td>
+        <td id="map3" class="map"></td>
+        <td id="map4" class="map"></td>
+        <td id="map5" class="map"></td>
+        <td id="map6" class="map"></td>
+
+    </tr>
+</table>
+
+
+<script>
+
+    layer = new ol.layer.Tile({
+        source: new ol.source.BingMaps({
+            imagerySet: 'Aerial',
+            key: 'Ak-dzM4wZjSqTlzveKz5u0d4IQ4bRzVI309GxmkgSVr1ewS6iPSrOvOKhA-CJlm3'
+        })
+    });
+
+    view1 = new ol.View({
+        center: ol.proj.fromLonLat([3.2313900000, 50.1744400000]),
+        zoom: 17
+    });
+    view2 = new ol.View({
+        center: ol.proj.fromLonLat([-0.0005000000, 42.6854200000]),
+        zoom: 10
+    });
+    view3 = new ol.View({
+        center: ol.proj.fromLonLat([3.2313900000, 50.1744400000]),
+        zoom: 17
+    });
+    view4 = new ol.View({
+        center: ol.proj.fromLonLat([-0.0005000000, 42.6854200000]),
+        zoom: 10
+    });
+    view5 = new ol.View({
+        center: ol.proj.fromLonLat([3.2313900000, 50.1744400000]),
+        zoom: 17
+    });
+    view6 = new ol.View({
+        center: ol.proj.fromLonLat([-0.0005000000, 42.6854200000]),
+        zoom: 10
+    });
+
+    var map1 = new ol.Map({
+        target: 'map1',
+        layers: [layer],
+        view: view1
+    });
+
+    var map2 = new ol.Map({
+        target: 'map2',
+        layers: [layer],
+        view: view2
+    });
+
+    var map3 = new ol.Map({
+        target: 'map3',
+        layers: [layer],
+        view: view3
+    });
+
+    var map4 = new ol.Map({
+        target: 'map4',
+        layers: [layer],
+        view: view4
+    });
+
+    var map5 = new ol.Map({
+        target: 'map5',
+        layers: [layer],
+        view: view5
+    });
+
+    var map6 = new ol.Map({
+        target: 'map6',
+        layers: [layer],
+        view: view6
+    });
+
+</script>
+</body>
+</html>

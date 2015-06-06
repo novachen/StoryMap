@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>世界自然文化遗产</title>
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="js/ol.js"></script>
+
+
+</head>
+<body>
+
+<div class="col-md-9">
+    <div>
+        <div id="map" class="map"></div>
+    </div>
+    <div id="popup" title="Welcome to ol3"></div>
+</div>
+
+
+<div id="info" class="col-md-3">
+    <h1>海上丝绸之路</h1>
+    <p>海上丝绸之路作为一项持续时间2000多年、范围覆盖大半个地球的人类历史活动和东西方文化经济交流的重要载体，多起点、多航线，具有不同历史年代的地位和作用，其历史遗产自然纳入“世遗”委员会的视野[18] 。</p>
+    <p>1992年，泉州开始筹划申遗，2001年上报国家文物局。2003年，国家文物局同意广州等地递交的捆绑申遗方案。2006年12月，泉州、宁波、广州三城列入世界文化遗产预备名单。自此至2012年11月，联合申报城市数度扩增至九座城市，并再次被列入世界文化遗产预备名单。截止2014年，海上丝绸之路申遗共计九座城市，50个遗产点。根据申遗日程，2015年完成准备工作，2016年正式送交世遗大会审议[18] 。</p>
+    <p>海上丝绸之路申遗城市：泉州、广州、宁波、扬州、北海、漳州、福州、南京、蓬莱[18] 。</p>
+    <p><b>泉州</b>：泉州天后宫、万寿塔、六胜塔、石湖码头、美山码头、文兴码头、九日山祈风石刻、真武庙、磁灶窑系金交 椅山窑址、开元寺、伊斯兰教三贤 四贤墓、清净寺、草庵摩尼光佛造像、德济门遗址、洛阳桥</p>
+    <p><b>广州</b>：南越王墓、南越国宫署遗址、光孝寺、怀圣寺与光塔、清真先贤古墓、南海神庙（明清古码头遗址）</p>
+    <p><b>宁波</b>：永丰库遗址、渔浦门码头遗址、保国寺、天童寺、阿育王寺、庆安会馆、天一阁</p>
+    <p><b>扬州</b>：立即列入项目（仙鹤寺、普哈丁墓）；后续列入项目（大明寺、扬州城遗址）</p>
+    <p><b>北海</b>：合浦汉墓群、大浪汉城址、草鞋村汉城址</p>
+    <p><b>漳州</b>：龙海月港遗址（豆巷古街、临江古街）、平和南胜窑遗址、华安东溪窑遗址</p>
+    <p><b>福州</b>：迥龙桥与邢港码头、东岐码头、圣寿宝塔、怀安窑址、恩赐琅琊郡王德政碑与天妃灵应之记碑</p>
+    <p><b>南京</b>：六朝都城遗址、道场寺遗址、明代都城遗址、静海寺、天妃宫、龙江宝船厂遗址、郑和墓地、浡泥国王墓、净觉寺、郑和府邸旧址、洪保墓、大报恩寺遗址。
+    <p><b>蓬莱</b>：蓬莱水城、蓬莱阁（天后宫、龙王庙）</p>
+</div>
+
+<script>
+    var threshold = 50000;
+
+    var style = new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: 'rgba(255, 255, 255, 0.6)'
+        }),
+        stroke: new ol.style.Stroke({
+            color: '#319FD3',
+            width: 1
+        }),
+        text: new ol.style.Text({
+            font: '12px Calibri,sans-serif',
+            fill: new ol.style.Fill({
+                color: '#000'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 3
+            })
+        })
+    });
+    var styles = [style];
+
+    var vectorLayer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: 'hssczl.json',
+            format: new ol.format.GeoJSON()
+        }),
+        style: function (feature, resolution) {
+            style.getText().setText(resolution < threshold ? feature.get('name') : '');
+            return styles;
+        }
+    });
+
+    var view = new ol.View({
+        center: ol.proj.fromLonLat([118.728364,24.813634]),
+        zoom: 10,
+        minZoom: 3,
+        maxZoom: 19
+    })
+
+    var map = new ol.Map({
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.BingMaps({
+                    imagerySet: 'Aerial',
+                    key: 'Ak-dzM4wZjSqTlzveKz5u0d4IQ4bRzVI309GxmkgSVr1ewS6iPSrOvOKhA-CJlm3'
+                })
+            }),
+            vectorLayer
+        ],
+        target: 'map',
+        view: view
+    });
+
+    var highlightStyleCache = {};
+
+    var featureOverlay = new ol.FeatureOverlay({
+        map: map,
+        style: function (feature, resolution) {
+            var text = resolution < threshold ? feature.get('name') : '';
+            if (!highlightStyleCache[text]) {
+                highlightStyleCache[text] = [new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: '#f00',
+                        width: 1
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255,0,0,0.1)'
+                    }),
+                    text: new ol.style.Text({
+                        font: '12px Calibri,sans-serif',
+                        text: text,
+                        fill: new ol.style.Fill({
+                            color: '#000'
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: '#f00',
+                            width: 3
+                        })
+                    })
+                })];
+            }
+            return highlightStyleCache[text];
+        }
+    });
+
+    var highlight;
+    var displayFeatureInfo = function (pixel) {
+
+        var feature = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+            return feature;
+        });
+
+        var info = document.getElementById('info');
+
+
+
+        if (feature !== highlight) {
+            if (highlight) {
+                featureOverlay.removeFeature(highlight);
+            }
+            if (feature) {
+                featureOverlay.addFeature(feature);
+            }
+            highlight = feature;
+
+            if (feature) {
+                info.innerHTML =
+                        '<table><tr><td height="100px">' +
+                        '<img src="' + feature.get('icon') + '"/>' +
+                        '</td><td>' +
+                        '<h2>' + feature.get('name') + '</h2>' +
+                        '</td></tr></table><br/>' +
+                        feature.get('short') + '<br/>' +
+                        '<img src="' + feature.get('img') + '" width="100%"/><br/>';
+            } else {
+                //info.innerHTML = '&nbsp;';
+            }
+        }
+
+    };
+
+    var focus = function (pixel) {
+
+        var feature = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+            return feature;
+        });
+
+        if (feature) {
+            geo = feature.getGeometry();
+            pos = geo.getFirstCoordinate();
+            view.setCenter(pos);
+            view.setZoom(feature.get('zoom'));
+        }
+    };
+
+    map.on('pointermove', function (evt) {
+        if (evt.dragging) {
+            return;
+        }
+        var pixel = map.getEventPixel(evt.originalEvent);
+        displayFeatureInfo(pixel);
+    });
+
+    // Popup showing the position the user clicked
+    var popup = new ol.Overlay({
+        element: document.getElementById('popup')
+    });
+    map.addOverlay(popup);
+
+    map.on('click', function(evt) {
+        if (evt.originalEvent.ctrlKey) // CONTROL
+        {
+            var element = popup.getElement();
+            var coordinate = evt.coordinate;
+            var hdms = ol.coordinate.toStringXY(ol.proj.transform(
+                    coordinate, 'EPSG:3857', 'EPSG:4326'), 10);
+
+            $(element).popover('destroy');
+            popup.setPosition(coordinate);
+            // the keys are quoted to prevent renaming in ADVANCED mode.
+            $(element).popover({
+                'placement': 'top',
+                'animation': false,
+                'html': true,
+                'content': '<p>The location you clicked was:</p><code>' + hdms + '</code>'
+            });
+            $(element).popover('show');
+        }
+    });
+
+    map.on('dblclick', function (evt) {
+        var pixel = map.getEventPixel(evt.originalEvent);
+        focus(pixel);
+    });
+
+</script>
+</body>
+</html>
