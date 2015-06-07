@@ -178,11 +178,14 @@
             highlight = feature;
 
             if (feature) {
+                pano = feature.get('pano');
                 info.innerHTML =
                         '<table><tr><td height="100px">' +
                         '<img src="' + feature.get('icon') + '"/>' +
                         '</td><td>' +
                         '<h2>' + feature.get('name') + '</h2>' +
+                        '</td><td>' +
+                        (pano===undefined? '' : '<a href="' + pano +'">全景</a>') +
                         '</td></tr></table><br/>' +
                         feature.get('short') + '<br/>' +
                         '<img src="' + feature.get('img') + '" width="100%"/><br/>';
