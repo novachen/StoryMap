@@ -27,7 +27,7 @@
 </div>
 
 <script>
-    var threshold = 50000;
+    var threshold = 1000;
 
     var style = new ol.style.Style({
         fill: new ol.style.Fill({
@@ -52,30 +52,40 @@
 
     var vectorLayer = new ol.layer.Vector({
         source: new ol.source.Vector({
-            url: 'test.json',
+            url: 'whc-en.json',
             format: new ol.format.GeoJSON()
         }),
         style: function (feature, resolution) {
-            style.getText().setText(resolution < threshold ? feature.get('name') : '');
+            style.getText().setText(resolution < threshold ? feature.get('title') : '●');
             return styles;
         }
     });
 
     var view = new ol.View({
-        center: ol.proj.fromLonLat([0, 45]),
-        zoom: 5,
+        center: ol.proj.fromLonLat([116.405,39.901]),
+        zoom: 10,
         minZoom: 3,
         maxZoom: 19
     })
 
+    tileLayer = new ol.layer.Tile({
+        source: new ol.source.BingMaps({
+            imagerySet: 'Aerial',
+            key: 'Ak-dzM4wZjSqTlzveKz5u0d4IQ4bRzVI309GxmkgSVr1ewS6iPSrOvOKhA-CJlm3'
+        })
+    });
+
+//    var tileLayer = new ol.layer.Tile({
+//        source: new ol.source.MapQuest({layer: 'sat'})
+//    });
+
+//    var tileLayer = new ol.layer.Tile({
+//        source: new ol.source.OSM()
+//    });
+
     var map = new ol.Map({
         layers: [
-            new ol.layer.Tile({
-                source: new ol.source.BingMaps({
-                    imagerySet: 'Aerial',
-                    key: 'Ak-dzM4wZjSqTlzveKz5u0d4IQ4bRzVI309GxmkgSVr1ewS6iPSrOvOKhA-CJlm3'
-                })
-            }),
+            tileLayer,
             vectorLayer
         ],
         target: 'map',
@@ -87,7 +97,8 @@
     var featureOverlay = new ol.FeatureOverlay({
         map: map,
         style: function (feature, resolution) {
-            var text = resolution < threshold ? feature.get('name') : '';
+            //var text = resolution < threshold ? feature.get('title') : '*';
+            var text = feature.get('title');
             if (!highlightStyleCache[text]) {
                 highlightStyleCache[text] = [new ol.style.Style({
                     stroke: new ol.style.Stroke({
@@ -135,13 +146,9 @@
 
             if (feature) {
                 info.innerHTML =
-                        '<table><tr><td height="100px">' +
-                        '<img src="' + feature.get('icon') + '"/>' +
-                        '</td><td>' +
-                        '<h2>' + feature.get('name') + '</h2>' +
-                        '</td></tr></table><br/>' +
-                        feature.get('short') + '<br/>' +
-                        '<img src="' + feature.get('img') + '" width="100%"/><br/>';
+                        '<a href="' + feature.get('link') + '" target="_blank">' +
+                        '<h2>' + feature.get('title') + '</h2>' + '</a>' +
+                        feature.get('description');
             } else {
                 //info.innerHTML = '&nbsp;';
             }
@@ -159,7 +166,7 @@
             geo = feature.getGeometry();
             pos = geo.getFirstCoordinate();
             view.setCenter(pos);
-            view.setZoom(feature.get('zoom'));
+            view.setZoom(15);
         }
     };
 
