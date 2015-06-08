@@ -73,7 +73,7 @@
 </div>
 
 <script>
-    var threshold = 50000;
+    var threshold = 100;
 
     var style = new ol.style.Style({
         fill: new ol.style.Fill({
@@ -102,7 +102,7 @@
             format: new ol.format.GeoJSON()
         }),
         style: function (feature, resolution) {
-            style.getText().setText(resolution < threshold ? feature.get('name') : '');
+            style.getText().setText(resolution < threshold ? feature.get('name') : '●');
             return styles;
         }
     });
@@ -133,7 +133,8 @@
     var featureOverlay = new ol.FeatureOverlay({
         map: map,
         style: function (feature, resolution) {
-            var text = resolution < threshold ? feature.get('name') : '';
+            //var text = resolution < threshold ? feature.get('name') : '';
+            var text = feature.get('name');
             if (!highlightStyleCache[text]) {
                 highlightStyleCache[text] = [new ol.style.Style({
                     stroke: new ol.style.Stroke({
