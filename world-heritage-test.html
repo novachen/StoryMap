@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>世界自然文化遗产</title>
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="js/ol.js"></script>
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .ah {
+            height: 100%;
+        }
+
+        .scrolly {
+            overflow-y: auto;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<div class="row ah">
+    <div class="col-md-9 ah">
+        <div id="map" class="map"></div>
+    </div>
+
+    <div id="info" class="col-md-3 ah scrolly">
+        <h1>世界自然文化遗产</h1>
+        <p>2014年6月25日第38届世界遗产委员会大会在卡塔尔首都多哈闭幕，大会审议通过新增26项世界遗产。根据最新统计，《世界遗产名录》收录的全球世界遗产总数已增至1007项，其中包括779项世界文化遗产（含文化景观遗产），197项自然遗产，31项文化与自然双重遗产。有31项遗产为两个或两个以上国家共有遗产，这些遗产分布在161个国家。</p>
+    </div>
+
+</div>
+
+<script>
+    var threshold = 1000;
+
+    var style = new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: 'rgba(255, 255, 255, 0.6)'
+        }),
+        stroke: new ol.style.Stroke({
+            color: '#319FD3',
+            width: 1
+        }),
+        text: new ol.style.Text({
+            font: '12px Calibri,sans-serif',
+            fill: new ol.style.Fill({
+                color: '#000'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 3
+            })
+        })
+    });
+    var styles = [style];
+
+    var vectorLayer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: 'whc-en.json',
+            format: new ol.format.GeoJSON()
+        }),
+        style: function (feature, resolution) {
+            style.getText().setText(resolution < threshold ? feature.get('title') : '●');
+            return styles;
+        }
+    });
+
+    var view = new ol.View({
+        center: ol.proj.fromLonLat([116.405,39.901]),
+        zoom: 10,
+        minZoom: 3,
+        maxZoom: 19
+    })
+
+    tileLayer = new ol.layer.Tile({
+        source: new ol.source.BingMaps({
+            imagerySet: 'Aerial',
+            key: 'Ak-dzM4wZjSqTlzveKz5u0d4IQ4bRzVI309GxmkgSVr1ewS6iPSrOvOKhA-CJlm3'
+        })
+    });
+
+//    var tileLayer = new ol.layer.Tile({
+//        source: new ol.source.MapQuest({layer: 'sat'})
+//    });
+
+//    var tileLayer = new ol.layer.Tile({
+//        source: new ol.source.OSM()
+//    });
+
+    var map = new ol.Map({
+        layers: [
+            tileLayer,
+            vectorLayer
+        ],
+        target: 'map',
+        view: view
+    });
+
+    var highlightStyleCache = {};
+
+    var featureOverlay = new ol.FeatureOverlay({
+        map: map,
+        style: function (feature, resolution) {
+            //var text = resolution < threshold ? feature.get('title') : '*';
+            var text = feature.get('title');
+            if (!highlightStyleCache[text]) {
+                highlightStyleCache[text] = [new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: '#f00',
+                        width: 1
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255,0,0,0.1)'
+                    }),
+                    text: new ol.style.Text({
+                        font: '12px Calibri,sans-serif',
+                        text: text,
+                        fill: new ol.style.Fill({
+                            color: '#000'
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: '#f00',
+                            width: 3
+                        })
+                    })
+                })];
+            }
+            return highlightStyleCache[text];
+        }
+    });
+
+    var highlight;
+    var displayFeatureInfo = function (pixel) {
+
+        var feature = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+            return feature;
+        });
+
+        var info = document.getElementById('info');
+
+
+        if (feature !== highlight) {
+            if (highlight) {
+                featureOverlay.removeFeature(highlight);
+            }
+            if (feature) {
+                featureOverlay.addFeature(feature);
+            }
+            highlight = feature;
+
+            if (feature) {
+                info.innerHTML =
+                        '<a href="' + feature.get('link') + '" target="_blank">' +
+                        '<h2>' + feature.get('title') + '</h2>' + '</a>' +
+                        feature.get('description');
+            } else {
+                //info.innerHTML = '&nbsp;';
+            }
+        }
+
+    };
+
+    var focus = function (pixel) {
+
+        var feature = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+            return feature;
+        });
+
+        if (feature) {
+            geo = feature.getGeometry();
+            pos = geo.getFirstCoordinate();
+            view.setCenter(pos);
+            view.setZoom(15);
+        }
+    };
+
+    map.on('pointermove', function (evt) {
+        if (evt.dragging) {
+            return;
+        }
+        var pixel = map.getEventPixel(evt.originalEvent);
+        displayFeatureInfo(pixel);
+    });
+
+    map.on('click', function (evt) {
+        var pixel = map.getEventPixel(evt.originalEvent);
+        focus(pixel);
+    });
+
+</script>
+</body>
+</html>
