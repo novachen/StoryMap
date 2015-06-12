@@ -34,6 +34,7 @@
 <div class="row ah">
     <div class="col-md-9 ah">
         <div id="map" class="map"></div>
+        <div id="popup" title="Welcome to ol3"></div>
     </div>
 
     <div id="info" class="col-md-3 ah scrolly">
@@ -69,7 +70,7 @@
 
     var vectorLayer = new ol.layer.Vector({
         source: new ol.source.Vector({
-            url: 'whc-en.json',
+            url: 'whc-en-test.json',
             format: new ol.format.GeoJSON()
         }),
         style: function (feature, resolution) {
@@ -195,11 +196,38 @@
         displayFeatureInfo(pixel);
     });
 
-    map.on('click', function (evt) {
-        var pixel = map.getEventPixel(evt.originalEvent);
-        focus(pixel);
+     // Popup showing the position the user clicked
+    var popup = new ol.Overlay({
+        element: document.getElementById('popup')
     });
+    map.addOverlay(popup);
 
+	map.on('click', function (evt) {
+        if (evt.originalEvent.ctrlKey) // CONTROL
+        {
+            var element = popup.getElement();
+            var coordinate = evt.coordinate;
+            var hdms = ol.coordinate.toStringXY(ol.proj.transform(
+                    coordinate, 'EPSG:3857', 'EPSG:4326'), 10);
+
+            $(element).popover('destroy');
+            popup.setPosition(coordinate);
+            // the keys are quoted to prevent renaming in ADVANCED mode.
+            $(element).popover({
+                'placement': 'top',
+                'animation': false,
+                'html': true,
+                'content': '<p>The location you clicked was:</p><code>' + hdms + '</code>'
+            });
+            $(element).popover('show');
+        }
+		else
+		{
+			var pixel = map.getEventPixel(evt.originalEvent);
+			focus(pixel);
+		}
+    });
+	
 </script>
 </body>
 </html>
