@@ -269,7 +269,7 @@
             var s2 = s1[i - 1].split(",");
             if (pointName == s2[1]) {
                 //alert(pointName + "*****" + s2[1] + "*****" + s2[2] + "*****" + s2[3]);
-                view.centerOn(ol.proj.fromLonLat([parseFloat(s2[2]), parseFloat(s2[3])]), map.getSize(), half);
+                view.centerOn([parseFloat(s2[2]), parseFloat(s2[3])], map.getSize(), half);
             }
         }
     }
