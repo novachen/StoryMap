@@ -1,0 +1,311 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>Satsee用户地图</title>
+
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="js/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+
+    <style>
+        .marker {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #088;
+            border-radius: 10px;
+            background-color: #0FF;
+            opacity: 0.5;
+        }
+
+        .city {
+            text-decoration: none;
+            color: white;
+            font-size: 11pt;
+            font-weight: bold;
+            text-shadow: black 0.1em 0.1em 0.2em;
+        }
+
+        .popover-content {
+            min-width: 180px;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .ah {
+            height: 100%;
+        }
+
+        .scrolly {
+            overflow-y: auto;
+        }
+
+        .normalcss {
+            background: #AAA;
+        }
+
+        .clickcss {
+            background: #EEE;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+    <div class="col-md-6 ah scrolly">
+        <div class="col-md-12">
+            <div class="row normalcss">
+                <h1>SatSee服务地图</h1>
+
+                <h3>我们的SatSee系统已经在全国十多家单位以及国外多个机构上安装运行。这个网页描述了目前已有的用户，以及我们目前正在开展的用户拓展工作。</h3>
+
+                <p>(这也是和地图一起讲故事(StoryMap)的一个例子，你可以点击文章的任意位置来驱动地图移动，也可以点击地图上的图标来驱动文章重定位)</p>
+            </div>
+            <div class="row">
+
+                <div onclick="showMap(this);changecss(this);" class="normalcss" id="a">
+                    <h2 >纳拉扬希蒂王宫博物馆</h2>
+                    <img src="/images/a.gif"/><br/>
+                    <img src="/images/as.jpg"/><br/>
+                </div>
+
+                <div onclick="showMap(this);changecss(this);" class="normalcss" id="b">
+                    <h2 >Nepalde bir budist mabedi</h2>
+                    <img src="/images/b.gif"/><br/>
+                    <img src="/images/bs.jpg"/><br/>
+                </div>
+
+                <div onclick="showMap(this);changecss(this);" class="normalcss" id="d">
+                    <h2 >杜巴广场</h2>
+                    <img src="/images/d.gif"/><br/>
+                    <img src="/images/ds.jpg"/><br/>
+                </div>
+
+                <div onclick="showMap(this);changecss(this);" class="normalcss" id="e">
+                    <h2 >比姆森塔</h2>
+                    <img src="/images/e.gif"/><br/>
+                    <img src="/images/es.jpg"/><br/>
+                </div>
+
+                <div onclick="showMap(this);changecss(this);" class="normalcss" id="f">
+                    <h2 >迪路迦摩罕纳拉扬神庙</h2>
+                    <img src="/images/f.gif"/><br/>
+                    <img src="/images/fs.jpg"/><br/>
+                </div>
+
+                <div onclick="showMap(this);changecss(this);" class="normalcss" id="g">
+                    <h2 >Kal Mochan Temple</h2>
+                    <img src="/images/g.gif"/><br/>
+                    <img src="/images/gs.jpg"/><br/>
+                </div>
+
+            </div>
+            <!--/row-->
+        </div>
+        <!--/.col-xs-12.col-sm-9-->
+    </div>
+    <div class="col-md-6 ah">
+        <div id="map" class="map">
+            <div id="popup"></div>
+        </div>
+    </div>
+
+    <div style="display: none;" id="mapinfo">
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    var fields = "纳拉扬希蒂王宫博物馆,a,1016, 1918;Nepalde bir budist mabedi,b,1335,1888;尼泊尔加德满都杜巴广场,d,539,1120;加德满都比姆森塔,e,811,1001;迪路迦摩罕纳拉扬神庙,f,1057,573;Kal Mochan Temple,g,1130,521";
+
+    var extent = [0, 0, 1960, 1960];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+
+    source1 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【4月11日 地震前】'
+            })
+        ],
+        url: '/images/e0411.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+    source2 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【4月27日 地震后】'
+            })
+        ],
+        url: '/images/e0427.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+    layer1 = new ol.layer.Image({
+        source: source1
+    });
+
+    layer2 = new ol.layer.Image({
+        source: source2
+    });
+
+    view = new ol.View({
+        projection: projection,
+        center: ol.extent.getCenter(extent),
+        zoom: 3
+    });
+
+    var map = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer1,
+                    layer2
+                ]
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map',
+        view: view
+    });
+
+    function bindInputs(layerid, layer) {
+        var visibilityInput = $(layerid + ' input.visible');
+        visibilityInput.on('change', function () {
+            layer.setVisible(this.checked);
+        });
+        visibilityInput.prop('checked', layer.getVisible());
+
+        $.each(['opacity', 'hue', 'saturation', 'contrast', 'brightness'],
+                function (i, v) {
+                    var input = $(layerid + ' input.' + v);
+                    input.on('input change', function () {
+                        layer.set(v, parseFloat(this.value));
+                    });
+                    input.val(String(layer.get(v)));
+                }
+        );
+    }
+    map.getLayers().forEach(function (layer, i) {
+        bindInputs('#layer' + i, layer);
+        if (layer instanceof ol.layer.Group) {
+            layer.getLayers().forEach(function (sublayer, j) {
+                bindInputs('#layer' + i + j, sublayer);
+            });
+        }
+    });
+
+    $('#layertree li > span').click(function () {
+        $(this).siblings('fieldset').toggle();
+    });
+
+    setInterval('flickImage()', 1000);
+
+    function flickImage() {
+//        console.log(layer2.getVisible());
+        layer2.setVisible(!layer2.getVisible());
+        var visibilityInput = $('#layer01' + ' input.visible');
+        visibilityInput.prop('checked', layer2.getVisible());
+    }
+
+
+    function changecss(obj) {
+        var d = document.getElementsByClassName('clickcss');
+        for (var i = 0; i < d.length; i++) {
+            d[i].className = "normalcss";
+        }
+        obj.className = "clickcss";
+    }
+
+    var maphtml = "";
+    var s1 = fields.split(";");
+    for (var i = 1; i <= s1.length; i++) {
+        var s2 = s1[i - 1].split(",");
+        maphtml += "<a class=\"overlay city\" id=\"city" + i + "\" href=\"#" + s2[1] + "\">" + s2[0] + "</a>";
+    }
+    document.getElementById("mapinfo").innerHTML = maphtml;
+
+    for (var i = 1; i <= s1.length; i++) {
+        var s2 = s1[i - 1].split(",");
+        var a = new Array(parseFloat(s2[2]), parseFloat(s2[3]));
+        var pos = a;
+        var marker = new ol.Overlay({
+            position: pos,
+            positioning: 'center-center',
+            element: document.getElementById('marker' + i),
+            stopEvent: false
+        });
+        map.addOverlay(marker);
+        var city = new ol.Overlay({
+            position: pos,
+            element: document.getElementById('city' + i)
+        });
+        map.addOverlay(city);
+    }
+
+    size = map.getSize();
+    half = [size[0] / 2, size[1] / 2];
+    function showMap(obj) {
+        var pointName = obj.id;
+        for (var i = 1; i <= s1.length; i++) {
+            var s2 = s1[i - 1].split(",");
+            if (pointName == s2[1]) {
+                //alert(pointName + "*****" + s2[1] + "*****" + s2[2] + "*****" + s2[3]);
+                view.centerOn(ol.proj.fromLonLat([parseFloat(s2[2]), parseFloat(s2[3])]), map.getSize(), half);
+            }
+        }
+    }
+
+    // Popup showing the position the user clicked
+    var popup = new ol.Overlay({
+        element: document.getElementById('popup')
+    });
+    map.addOverlay(popup);
+
+    map.on('click', function (evt) {
+        if (evt.originalEvent.ctrlKey) // CONTROL
+        {
+            var element = popup.getElement();
+            var coordinate = evt.coordinate;
+            var xy = ol.coordinate.toStringXY(coordinate, 10);
+
+            $(element).popover('destroy');
+            popup.setPosition(coordinate);
+            // the keys are quoted to prevent renaming in ADVANCED mode.
+            $(element).popover({
+                'placement': 'top',
+                'animation': false,
+                'html': true,
+                'content': '<p>The location you clicked was:</p><code>' + xy + '</code>'
+            });
+            $(element).popover('show');
+        }
+        else
+        {
+            var pixel = map.getEventPixel(evt.originalEvent);
+            focus(pixel);
+        }
+    });
+
+
+</script>
+</body>
+</html>

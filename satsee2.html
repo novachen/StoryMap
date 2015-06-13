@@ -22,7 +22,6 @@
             height: 20px;
             border: 1px solid #088;
             border-radius: 10px;
-            background-color: #0FF;
             opacity: 0.5;
         }
 
@@ -259,7 +258,8 @@ HJ-1A and HJ-1B are Chinese small satellites with 30 m resolution and 720 km swa
     var s1 = fields.split(";");
     for (var i = 1; i <= s1.length; i++) {
         var s2 = s1[i - 1].split(",");
-        maphtml += "<a class=\"overlay city\" id=\"city" + i + "\" href=\"#" + s2[1] + "\">" + s2[0] + "</a><div class=\"marker\" id=\"marker" + i + "\" title=\"Marker\"></div>";
+        maphtml += "<a class=\"overlay city\" id=\"city" + i + "\" href=\"#" + s2[1] + "\">" + s2[0] + "</a>" +
+                "<a class=\"marker\" id=\"marker" + i + "\" href=\"#" + s2[1] + "\">" + s2[0] + "</a>";
     }
     document.getElementById("mapinfo").innerHTML = maphtml;
 
