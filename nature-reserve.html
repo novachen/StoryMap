@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>中国自然保护区</title>
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="js/ol.js"></script>
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .ah {
+            height: 100%;
+        }
+
+        .scrolly {
+            overflow-y: auto;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<div class="row ah">
+    <div class="col-md-9 ah">
+        <div id="map" class="map"></div>
+    </div>
+
+    <div id="info" class="col-md-3 ah scrolly">
+        <h1>中国自然保护区</h1>
+        <p>自然保护区是指对有代表性的自然生态系统、珍稀濒危野生动植物物种的天然集中分布、有特殊意义的自然遗迹等保护对象所在的陆地、陆地水域或海域，依法划出一定面积予以特殊保护和管理的区域。</p>
+<p>自然保护区是一个泛称，实际上，由于建立的目的、要求和本身所具备的条件不同，而有多种类型。按照保护的主要对象来划分，自然保护区可以分为生态系统类型保护区、生物物种保护区和自然遗迹保护区3类；按照保护区的性质来划分，自然保护区可以分为科研保护区、国家公园（即风景名胜区）、管理区和资源管理保护区4类。不管保护区的类型如何，其总体要求是以保护为主，在不影响保护的前提下，把科学研究、教育、生产和旅游等活动有机地结合起来，使它的生态、社会和经济效益都得到充分展示。</p>
+<h1>中国自然保护区动态地图系统</h1>
+<p>力图通过一个简单易用的动态地图系统，让中国广大民众了解我们周边珍贵的动植物资源，促进大家关心爱护我们身边的自然环境。</p>
+<p>本系统由中国科学院遥感与数字地球研究所的研究人员编撰</p>
+<p>项目发起人 陈甫</p>
+<p>项目参与人 郭锐</p>
+    </div>
+
+</div>
+
+<script>
+    var threshold = 1000;
+
+    var style = new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: 'rgba(255, 255, 255, 0.6)'
+        }),
+        stroke: new ol.style.Stroke({
+            color: '#319FD3',
+            width: 1
+        }),
+        text: new ol.style.Text({
+            font: '12px Calibri,sans-serif',
+            fill: new ol.style.Fill({
+                color: '#000'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#ff0',
+                width: 3
+            })
+        })
+    });
+    var styles = [style];
+
+    var vectorLayer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: 'nature-reserve.json',
+            format: new ol.format.GeoJSON()
+        }),
+        style: function (feature, resolution) {
+            style.getText().setText(resolution < threshold ? feature.get('title') : '●');
+            return styles;
+        }
+    });
+
+    var view = new ol.View({
+        center: ol.proj.fromLonLat([116.405,39.901]),
+        zoom: 10,
+        minZoom: 3,
+        maxZoom: 19
+    })
+
+    tileLayer = new ol.layer.Tile({
+        source: new ol.source.BingMaps({
+            imagerySet: 'AerialWithLabels',
+            key: 'Ak-dzM4wZjSqTlzveKz5u0d4IQ4bRzVI309GxmkgSVr1ewS6iPSrOvOKhA-CJlm3'
+        })
+    });
+
+//    var tileLayer = new ol.layer.Tile({
+//        source: new ol.source.MapQuest({layer: 'sat'})
+//    });
+
+//    var tileLayer = new ol.layer.Tile({
+//        source: new ol.source.OSM()
+//    });
+
+    var map = new ol.Map({
+        layers: [
+            tileLayer,
+            vectorLayer
+        ],
+        target: 'map',
+        view: view
+    });
+
+    var highlightStyleCache = {};
+
+    var featureOverlay = new ol.FeatureOverlay({
+        map: map,
+        style: function (feature, resolution) {
+            //var text = resolution < threshold ? feature.get('title') : '*';
+            var text = feature.get('title');
+            if (!highlightStyleCache[text]) {
+                highlightStyleCache[text] = [new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: '#f00',
+                        width: 1
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255,0,0,0.1)'
+                    }),
+                    text: new ol.style.Text({
+                        font: '12px Calibri,sans-serif',
+                        text: text,
+                        fill: new ol.style.Fill({
+                            color: '#000'
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: '#f00',
+                            width: 3
+                        })
+                    })
+                })];
+            }
+            return highlightStyleCache[text];
+        }
+    });
+
+    var highlight;
+    var displayFeatureInfo = function (pixel) {
+
+        var feature = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+            return feature;
+        });
+
+        var info = document.getElementById('info');
+
+
+        if (feature !== highlight) {
+            if (highlight) {
+                featureOverlay.removeFeature(highlight);
+            }
+            if (feature) {
+                featureOverlay.addFeature(feature);
+            }
+            highlight = feature;
+
+            if (feature) {
+                info.innerHTML =
+                        '<a href="' + feature.get('link') + '" target="_blank">' +
+                        '<h2>' + feature.get('title') + '</h2>' + '</a>' +
+                        feature.get('description');
+            } else {
+                //info.innerHTML = '&nbsp;';
+            }
+        }
+
+    };
+
+    var focus = function (pixel) {
+
+        var feature = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+            return feature;
+        });
+
+        if (feature) {
+            geo = feature.getGeometry();
+            pos = geo.getFirstCoordinate();
+            view.setCenter(pos);
+            view.setZoom(15);
+        }
+    };
+
+    map.on('pointermove', function (evt) {
+        if (evt.dragging) {
+            return;
+        }
+        var pixel = map.getEventPixel(evt.originalEvent);
+        displayFeatureInfo(pixel);
+    });
+
+    map.on('click', function (evt) {
+        var pixel = map.getEventPixel(evt.originalEvent);
+        focus(pixel);
+    });
+
+</script>
+</body>
+</html>
