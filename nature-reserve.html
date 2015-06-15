@@ -170,7 +170,15 @@
             if (feature) {
                 info.innerHTML =
                         '<h2>' + feature.get('name') + '</h2>' +
-                        feature.get('protectobject');
+						'<p>' +
+						'区域等级：' + feature.get('level')+ '<br/>' +
+						'区域地址：' + feature.get('address')+ '<br/>' +
+						'区域面积：' + feature.get('area')+ '<br/>' +
+						'地理类型：' + feature.get('type')+ '<br/>' +
+						'保护对象：' + feature.get('protectobject')+ '<br/>' +
+						'成立日期：' + feature.get('date')+ '<br/>' +
+						'主管部门：' + feature.get('department')+ '<br/>' +
+						'</p>';
             } else {
                 //info.innerHTML = '&nbsp;';
             }
