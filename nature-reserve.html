@@ -50,7 +50,7 @@
 </div>
 
 <script>
-    var threshold = 1000;
+    var threshold = 500;
 
     var style = new ol.style.Style({
         fill: new ol.style.Fill({
@@ -75,11 +75,11 @@
 
     var vectorLayer = new ol.layer.Vector({
         source: new ol.source.Vector({
-            url: 'nature-reserve.json',
+            url: 'nature-reserve2.json',
             format: new ol.format.GeoJSON()
         }),
         style: function (feature, resolution) {
-            style.getText().setText(resolution < threshold ? feature.get('title') : '●');
+            style.getText().setText(resolution < threshold ? feature.get('address') + ' ' + feature.get('name') + ' ' + feature.get('protectobject'): '●');
             return styles;
         }
     });
@@ -121,7 +121,7 @@
         map: map,
         style: function (feature, resolution) {
             //var text = resolution < threshold ? feature.get('title') : '*';
-            var text = feature.get('title');
+            var text = feature.get('address') + ' ' + feature.get('name') + ' ' + feature.get('protectobject');
             if (!highlightStyleCache[text]) {
                 highlightStyleCache[text] = [new ol.style.Style({
                     stroke: new ol.style.Stroke({
@@ -169,9 +169,8 @@
 
             if (feature) {
                 info.innerHTML =
-                        '<a href="' + feature.get('link') + '" target="_blank">' +
-                        '<h2>' + feature.get('title') + '</h2>' + '</a>' +
-                        feature.get('description');
+                        '<h2>' + feature.get('name') + '</h2>' +
+                        feature.get('protectobject');
             } else {
                 //info.innerHTML = '&nbsp;';
             }
