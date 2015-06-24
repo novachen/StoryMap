@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>尼泊尔地震（无云产品比较）</title>
+
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="js/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+    <div class="col-md-12 ah">
+        <div class="row ah">
+            <div class="col-md-6 ah">
+                <div id="map" class="map"></div>
+            </div>
+            <div class="col-md-6 ah">
+                <div id="map2" class="map2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var extent = [0, 0, 1960, 1960];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+
+    source1 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【4月11日 地震前】'
+            })
+        ],
+        url: 'http://novachen.github.io/images/e0411.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+    source2 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【4月27日 地震后】'
+            })
+        ],
+        url: 'http://novachen.github.io/images/e0427.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+
+	source3 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '无云融合'
+            })
+        ],
+        url: 'http://novachen.github.io/images/MERGE2.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+	
+	
+    layer1 = new ol.layer.Image({
+        source: source1
+    });
+
+    layer2 = new ol.layer.Image({
+        source: source2
+    });
+
+    layer3 = new ol.layer.Image({
+        source: source3
+    });
+
+	view = new ol.View({
+        projection: projection,
+        center: [500,1150],
+        zoom: 4
+    });
+
+    var map = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer2,
+                    layer1
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map',
+        view: view
+    });
+
+    var map2 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer3,
+                    layer1
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map2',
+        view: view
+    });
+
+    $('#layertree li > span').click(function () {
+        $(this).siblings('fieldset').toggle();
+    });
+
+    setInterval('flickImage()', 1000);
+
+    function flickImage() {
+        layer1.setVisible(!layer1.getVisible());
+    }
+
+</script>
+</body>
+</html>
