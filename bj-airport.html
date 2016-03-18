@@ -131,8 +131,7 @@
         layers: [
             new ol.layer.Group({
                 layers: [
-                    layer1,
-                    layer2
+                    layer10
                 ]
 
             })
@@ -146,7 +145,7 @@
         layers: [
             new ol.layer.Group({
                 layers: [
-                    layer10
+                    layer20
                 ]
 
             })
@@ -160,7 +159,8 @@
         layers: [
             new ol.layer.Group({
                 layers: [
-                    layer20
+                    layer1,
+					layer2
                 ]
 
             })
@@ -201,7 +201,7 @@
                 }
         );
     }
-    map.getLayers().forEach(function (layer, i) {
+    map3.getLayers().forEach(function (layer, i) {
         bindInputs('#layer' + i, layer);
         if (layer instanceof ol.layer.Group) {
             layer.getLayers().forEach(function (sublayer, j) {
