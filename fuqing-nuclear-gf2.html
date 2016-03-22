@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>福清核电站</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+    <div class="col-md-2 ah scrolly">
+	
+<h1>福清核电站</h1>
+
+<p>
+右侧是我国最高清的民用卫星高分二号（0.8米分辨率）的2015-11的图像。在图像上使用鼠标点击、拖拽、滚轮滑动可以浏览图像的局部。<br/><br/>
+福清核电站计划兴建6套机组，从卫星影像可以观察目前一共有四台机组已经运行，而另外还有两台机组正在施工中。<br/><br/>
+</p>	
+	</div>
+	
+    <div class="col-md-10 ah">
+         <div id="map" class="map"></div>
+    </div>
+</div>
+
+<script>
+    var extent = [0, 0, 6000, 6000];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+
+    source1 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【20151118】'
+            })
+        ],
+        url: 'img/20151118-gf2.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+
+
+    layer1 = new ol.layer.Image({
+        source: source1
+    });
+
+
+    view = new ol.View({
+        projection: projection,
+        center: ol.extent.getCenter(extent),
+        zoom: 5
+    });
+
+    var map = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer1,
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map',
+        view: view
+    });
+
+
+    function bindInputs(layerid, layer) {
+        var visibilityInput = $(layerid + ' input.visible');
+        visibilityInput.on('change', function () {
+            layer.setVisible(this.checked);
+        });
+        visibilityInput.prop('checked', layer.getVisible());
+
+        $.each(['opacity', 'hue', 'saturation', 'contrast', 'brightness'],
+                function (i, v) {
+                    var input = $(layerid + ' input.' + v);
+                    input.on('input change', function () {
+                        layer.set(v, parseFloat(this.value));
+                    });
+                    input.val(String(layer.get(v)));
+                }
+        );
+    }
+    map.getLayers().forEach(function (layer, i) {
+        bindInputs('#layer' + i, layer);
+        if (layer instanceof ol.layer.Group) {
+            layer.getLayers().forEach(function (sublayer, j) {
+                bindInputs('#layer' + i + j, sublayer);
+            });
+        }
+    });
+
+    $('#layertree li > span').click(function () {
+        $(this).siblings('fieldset').toggle();
+    });
+
+
+</script>
+</body>
+</html>
