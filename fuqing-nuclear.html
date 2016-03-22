@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>福清核电站(canvas)</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+    <div class="col-md-2 ah scrolly">
+	
+<h1>福清核电站</h1>
+
+<p>
+右侧上方是2013-08-13的高分1号卫星图像，右侧下方是2014-01-30的高分1号卫星图像。中间切换显示这两幅图像，可以观察前后的变化情况。在图像上使用鼠标点击、拖拽、滚轮滑动可以浏览图像的局部。<br/><br/>
+清核电项目规划建设6台百万千瓦级压水堆核电机组，1至4号机组为二代改进型压水堆M310，5、6号机组为ACP1000(华龙一号)，综合国产化率达75%，总投资近千亿元。项目单台机组建设周期60个月，6台机组间隔10个月连续建设。<br/><br/>2008年11月21日，中共中央政治局常委、国务院副总理李克强宣布项目正式开工建设。目前福清核电项目各项工作进展良好，福清核电站1、2号机组将分别于2013年11月和2014年9月建成投产。<br/><br/>
+一期工程建成发电，每年至少可减少二氧化碳排放1600万吨，减少10万吨火力发电用煤的灰渣以及大量二氧化硫、二氧化氮等排放。6台机组计划在2018年全部建成投产，至少可拉动地方经济3000亿元的投资和增加3万人的就业。福清核电站6台机组连续建设还将为中国核电站群堆建设以及核电批量化、规模化发展打下坚实的基础。<br/><br/>
+</p>	
+	</div>
+	
+    <div class="col-md-10 ah">
+        <div class="col-md-6 ah">
+            <div id="map" class="map"></div>
+        </div>
+        <div class="col-md-6 ah">
+            <div class="row hh">
+                <div id="map2" class="map"></div>
+            </div>
+            <div class="row hh">
+                <div id="map3" class="map"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var extent = [0, 0, 4000, 4000];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+
+    source1 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【20130813】'
+            })
+        ],
+        url: 'img/20130813.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+    source2 = new ol.source.ImageStatic({
+        attributions: [
+            new ol.Attribution({
+                html: '【20140130】'
+            })
+        ],
+        url: 'img/20140130.jpg',
+        projection: projection,
+        imageExtent: extent
+    });
+
+
+    layer1 = new ol.layer.Image({
+        source: source1
+    });
+
+    layer2 = new ol.layer.Image({
+        source: source2
+    });
+
+    layer10 = new ol.layer.Image({
+        source: source1
+    });
+
+    layer20 = new ol.layer.Image({
+        source: source2
+    });
+
+    view = new ol.View({
+        projection: projection,
+        center: ol.extent.getCenter(extent),
+        zoom: 2
+    });
+
+    var map = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer1,
+                    layer2
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map',
+        view: view
+    });
+
+    var map2 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer10
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map2',
+        view: view
+    });
+
+    var map3 = new ol.Map({
+        layers: [
+            new ol.layer.Group({
+                layers: [
+                    layer20
+                ]
+
+            })
+        ],
+        renderer: 'canvas',
+        target: 'map3',
+        view: view
+    });
+
+    function bindInputs(layerid, layer) {
+        var visibilityInput = $(layerid + ' input.visible');
+        visibilityInput.on('change', function () {
+            layer.setVisible(this.checked);
+        });
+        visibilityInput.prop('checked', layer.getVisible());
+
+        $.each(['opacity', 'hue', 'saturation', 'contrast', 'brightness'],
+                function (i, v) {
+                    var input = $(layerid + ' input.' + v);
+                    input.on('input change', function () {
+                        layer.set(v, parseFloat(this.value));
+                    });
+                    input.val(String(layer.get(v)));
+                }
+        );
+    }
+    map.getLayers().forEach(function (layer, i) {
+        bindInputs('#layer' + i, layer);
+        if (layer instanceof ol.layer.Group) {
+            layer.getLayers().forEach(function (sublayer, j) {
+                bindInputs('#layer' + i + j, sublayer);
+            });
+        }
+    });
+
+    $('#layertree li > span').click(function () {
+        $(this).siblings('fieldset').toggle();
+    });
+
+    setInterval('flickImage()', 1000);
+
+    function flickImage() {
+//        console.log(layer2.getVisible());
+        layer2.setVisible(!layer2.getVisible());
+        var visibilityInput = $('#layer01' + ' input.visible');
+        visibilityInput.prop('checked', layer2.getVisible());
+    }
+
+</script>
+</body>
+</html>
