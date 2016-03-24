@@ -47,7 +47,13 @@
 
 <p>
 右侧是我国最高清的民用卫星高分二号（0.8米分辨率）的2015年11月18日的图像。在图像上使用鼠标点击、拖拽、滚轮滑动可以浏览图像的局部。<br/><br/>
-福清核电站计划兴建6套机组，从卫星影像可以观察目前最南的两台机组应该已经运行，中间的两台外观上已经建设完毕但是周边还有一些高吊没有拆除，可能还没有正式运行，而另外最北边还有两台机组正在施工中。<br/><br/>
+福清核电站计划分批兴建6套核动力机组：<br/><br/>
+从卫星影像可以观察目前最南的两台机组（<a onclick="javascript:view.centerOn([2577,2506], size, half)">一号二号</a>）应该已经运行，<br/><br/>
+中间的两台（<a onclick="javascript:view.centerOn([2887,2957], size, half)">三号四号</a>）外观上已经建设完毕但是周边还有一些高吊没有拆除，可能还没有正式运行。<br/><br/>
+而另外最北边还有两台机组（<a onclick="javascript:view.centerOn([3164,3326], size, half)">五号六号</a>）正在施工中。<br/><br/>
+核电站北边有一个人口众多的（<a onclick="javascript:view.centerOn([3371,5606], size, half)">小村子</a>。<br/><br/>
+周边的滩涂上还有不少渔民的（<a onclick="javascript:view.centerOn([2133,3696], size, half)">水产养殖场</a>。<br/><br/>
+
 </p>	
 	</div>
 	
@@ -63,6 +69,7 @@
         units: 'pixels',
         extent: extent
     });
+
 
     source1 = new ol.source.ImageStatic({
         attributions: [
@@ -101,6 +108,9 @@
         target: 'map',
         view: view
     });
+
+	size =map.getSize();
+    half = [size[0]/2, size[1]/2];
 
 
     function bindInputs(layerid, layer) {
