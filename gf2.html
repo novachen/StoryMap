@@ -18,7 +18,7 @@
     <style>
 body
 {
-font-size : 2em;
+font-size : 2.5em;
 }
         #layertree li > span {
             cursor: pointer;
@@ -45,11 +45,11 @@ font-size : 2em;
 		position:absolute;
 		left:30px;
 		top:30px;
-		width:200px;
+		width:300px;
 		bottom:20px;
 		overflow-y: auto;
 		background:#FFF;
-		filter:alpha(Opacity=60);-moz-opacity:0.6;opacity: 0.6;
+		filter:alpha(Opacity=70);-moz-opacity:0.7;opacity: 0.7;
 		}
     </style>
 </head>
@@ -59,10 +59,9 @@ font-size : 2em;
     <div class="story">
 	
 <h1>福清核电站</h1>
-<h4>Fuqing Nuclear Power Plant</h4>
 
 <p>
-<br/><br/>
+<br/>
 右侧是我国最高清的民用卫星高分二号（0.8米分辨率）的2015年11月18日的图像。在图像上使用鼠标点击、拖拽、滚轮滑动可以浏览图像的局部。<br/><br/>
 福清核电站计划分批兴建6套核动力机组：<br/><br/>
 从卫星影像可以看到目前最南的两台机组（<a onclick="javascript:hotPoint(0)" href="#">一号二号</a>）应该已经投入运行，<br/><br/>
@@ -93,6 +92,11 @@ font-size : 2em;
         layers: [
           new ol.layer.Tile({
             source: new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: '【中国科学院遥感与数字地球研究所】'
+					})
+				],
               url: 'tiles/gf2/{z}/{x}/{-y}.png',
 			  projection: projection
             })
