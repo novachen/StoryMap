@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no">
+
+    <title>福清核电站</title>
+
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+		.story {
+		z-index:100;
+		position:absolute;
+		left:30px;
+		top:30px;
+		width:350px;
+		bottom:20px;
+		overflow-y: auto;
+		background:#FFF;
+		filter:alpha(Opacity=70);-moz-opacity:0.7;opacity: 0.7;
+		}
+		
+		.bigtext {
+			font-size: 2em;
+		}
+		
+    </style>
+</head>
+<body>
+<div class="row ah">
+    <div class="col-md-2 ah">
+		
+<h1>ZY02C PAN和HR传感器配准方法效果比较</h1>
+</br>
+
+<p>
+左侧是用ENVI的配准工具，先手工找30个控制点，然后再自动寻找50个控制点，利用80个控制点建立二阶多项式后校正的结果。</br></br>
+右侧是FALCON系统利用基于仿真的局部梯度追踪法，无人工干预全自动完成的结果</br></br>
+</p>
+
+		
+	</div>
+    <div class="col-md-5 ah">
+		<div id="map1" class="map"></div>
+	</div>
+    <div class="col-md-5 ah">
+		<div id="map2" class="map"></div>
+	</div>
+</div>
+    <script>
+    var extent = [0, 0, 12000, 11999];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+	
+	source1 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: 'PAN'
+					})
+				],
+              url: 'tiles/pan/{z}/{x}/{-y}.png',
+			  projection: projection
+            });
+	source2 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: 'HR2 BY ENVI'
+					})
+				],
+              url: 'tiles/hr2_envi/{z}/{x}/{-y}.png',
+			  projection: projection
+            });
+	source3 = new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: 'HR2 BY FALCON'
+					})
+				],
+              url: 'tiles/hr2_fine/{z}/{x}/{-y}.png',
+			  projection: projection
+            });
+
+	layer1 = new ol.layer.Tile({
+        source: source1
+    });
+
+    layer2 = new ol.layer.Tile({
+        source: source2
+    });
+
+    layer3 = new ol.layer.Tile({
+        source: source3
+    });
+	
+    view = new ol.View({
+		projection: projection,
+        center: [3000,3000],
+        zoom: 6
+    });
+	
+	var map1 = new ol.Map({
+		target: 'map1',
+		layers: [
+			new ol.layer.Group({
+				layers: [
+					layer1,
+					layer2
+				]
+			})
+		],
+
+		view: view
+	});
+
+	var map2 = new ol.Map({
+		target: 'map2',
+		layers: [
+			new ol.layer.Group({
+				layers: [
+					layer1,
+					layer3
+				]
+			})
+		],
+
+		view: view
+	});
+	  
+    setInterval('flickImage()', 1000);
+
+    function flickImage() {
+        layer2.setVisible(!layer2.getVisible());
+		layer3.setVisible(!layer3.getVisible());
+    }
+	
+    </script>
+  </body>
+</html>
