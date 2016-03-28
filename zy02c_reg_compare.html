@@ -5,7 +5,7 @@
     <meta charset="utf-8">
 	<meta name="viewport" content="user-scalable=no">
 
-    <title>福清核电站</title>
+    <title>ZY02C</title>
 
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -64,6 +64,9 @@
 </br>
 
 <p>
+ZY02C有三种传感器，10米的三波段的MS，5米的PAN，2.36米的HR。</br></br>
+其中2.36米的HR又由两个相机分别采集，被称为HR1和HR2。</br></br>
+充分利用这些数据应该可以构造出2.36米尺度的三波段图像。现有遥感软件如ENVI、PCI都不能很好处理PAN和HR的配准，导致最终的融合结果较差。</br></br>
 左侧是用ENVI的配准工具，先手工找30个控制点，然后再自动寻找50个控制点，利用80个控制点建立二阶多项式后校正的结果。</br></br>
 右侧是FALCON系统利用基于仿真的局部梯度追踪法，无人工干预全自动完成的结果</br></br>
 </p>
@@ -158,12 +161,27 @@
 
 		view: view
 	});
-	  
+	
+	layer1.setVisible(true);
+	layer2.setVisible(false);
+	layer3.setVisible(false);
+
     setInterval('flickImage()', 1000);
 
     function flickImage() {
-        layer2.setVisible(!layer2.getVisible());
-		layer3.setVisible(!layer3.getVisible());
+		if (layer1.getVisible())
+		{
+			layer2.setVisible(!layer2.getVisible());
+			layer3.setVisible(!layer3.getVisible());
+			layer1.setVisible(!layer1.getVisible());
+		}
+		else
+		{
+			layer1.setVisible(!layer1.getVisible());
+			layer2.setVisible(!layer2.getVisible());
+			layer3.setVisible(!layer3.getVisible());
+		}
+		
     }
 	
     </script>
