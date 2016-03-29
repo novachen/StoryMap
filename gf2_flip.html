@@ -64,7 +64,8 @@
 <body>
 <div class="row ah">
     <div class="col-md-2 ah">
-		
+    <button id="switchFlipBtn">按这个按钮来选择是否切换显示</button>
+	
 <h1>高分二号配准融合效果比较</h1>
 </br>
 
@@ -106,7 +107,7 @@ GF2上有PAN和MS两个传感器，为了得到最终的图像产品，需要对
 	source1 = new ol.source.XYZ({
 			    attributions: [
 					new ol.Attribution({
-						html: 'RPC ONLY'
+						html: '正射 -> NNDiffuse融合'
 					})
 				],
               url: 'tiles/rpcOnly/{z}/{x}/{-y}.png',
@@ -115,7 +116,7 @@ GF2上有PAN和MS两个传感器，为了得到最终的图像产品，需要对
 	source2 = new ol.source.XYZ({
 			    attributions: [
 					new ol.Attribution({
-						html: 'RPC AUTO'
+						html: '正射 -> ENVI自动配准 -> NNDiffuse融合'
 					})
 				],
               url: 'tiles/rpcAuto/{z}/{x}/{-y}.png',
@@ -124,7 +125,7 @@ GF2上有PAN和MS两个传感器，为了得到最终的图像产品，需要对
 	source3 = new ol.source.XYZ({
 			    attributions: [
 					new ol.Attribution({
-						html: 'RPC Manual'
+						html: '正射 -> ENVI手动找点配准 -> NNDiffuse融合'
 					})
 				],
               url: 'tiles/rpcManual/{z}/{x}/{-y}.png',
@@ -133,7 +134,7 @@ GF2上有PAN和MS两个传感器，为了得到最终的图像产品，需要对
 	source4 = new ol.source.XYZ({
 			    attributions: [
 					new ol.Attribution({
-						html: 'FALCON'
+						html: 'FALCON系统全自动完成'
 					})
 				],
               url: 'tiles/falcon/{z}/{x}/{-y}.png',
@@ -224,25 +225,52 @@ GF2上有PAN和MS两个传感器，为了得到最终的图像产品，需要对
 	layer3.setVisible(false);
 	
 
-    setInterval('flickImage()', 1000);
+	doFlip = true;
+    setInterval('flipImage()', 1000);
 
-    function flickImage() {
-		if (layer5.getVisible())
+    function flipImage() {
+		if (doFlip)
 		{
-			layer1.setVisible(!layer1.getVisible());
-			layer2.setVisible(!layer2.getVisible());
-			layer3.setVisible(!layer3.getVisible());
-			layer5.setVisible(!layer5.getVisible());
+			if (layer5.getVisible())
+			{
+				layer1.setVisible(!layer1.getVisible());
+				layer2.setVisible(!layer2.getVisible());
+				layer3.setVisible(!layer3.getVisible());
+				layer5.setVisible(!layer5.getVisible());
+			}
+			else
+			{
+				layer5.setVisible(!layer5.getVisible());
+				layer1.setVisible(!layer1.getVisible());
+				layer2.setVisible(!layer2.getVisible());
+				layer3.setVisible(!layer3.getVisible());
+			}
 		}
+    }
+
+	function stopFlip()
+	{
+		doFlip = false;
+		layer5.setVisible(false);
+		layer4.setVisible(true);
+		layer1.setVisible(true);
+		layer2.setVisible(true);
+		layer3.setVisible(true);
+	}
+	
+	function runFlip()
+	{
+		doFlip = true;
+	}
+	
+	var switchBtn = document.getElementById('switchFlipBtn');
+    switchBtn.addEventListener('click', function() {	
+		if (doFlip)
+			stopFlip();
 		else
-		{
-			layer5.setVisible(!layer5.getVisible());
-			layer1.setVisible(!layer1.getVisible());
-			layer2.setVisible(!layer2.getVisible());
-			layer3.setVisible(!layer3.getVisible());
-		}
-		
-    }	
+			runFlip();
+	});
+	
     </script>
   </body>
 </html>
