@@ -156,6 +156,10 @@ GF2上有PAN和MS两个传感器，为了得到最终的图像产品，需要对
         source: source4
     });
 	
+    layer5 = new ol.layer.Tile({
+        source: source4
+    });
+
     view = new ol.View({
 		projection: projection,
         center: [3500,3500],
@@ -167,7 +171,8 @@ GF2上有PAN和MS两个传感器，为了得到最终的图像产品，需要对
 		layers: [
 			new ol.layer.Group({
 				layers: [
-					layer1
+					layer1,
+					layer5
 				]
 			})
 		],
@@ -179,7 +184,8 @@ GF2上有PAN和MS两个传感器，为了得到最终的图像产品，需要对
 		layers: [
 			new ol.layer.Group({
 				layers: [
-					layer2
+					layer2,
+					layer5
 				]
 			})
 		],
@@ -191,7 +197,8 @@ GF2上有PAN和MS两个传感器，为了得到最终的图像产品，需要对
 		layers: [
 			new ol.layer.Group({
 				layers: [
-					layer3
+					layer3,
+					layer5
 				]
 			})
 		],
@@ -209,7 +216,33 @@ GF2上有PAN和MS两个传感器，为了得到最终的图像产品，需要对
 		],
 		view: view
 	});
+
+	layer5.setVisible(true);
+	layer4.setVisible(true);
+	layer1.setVisible(false);
+	layer2.setVisible(false);
+	layer3.setVisible(false);
 	
+
+    setInterval('flickImage()', 1000);
+
+    function flickImage() {
+		if (layer5.getVisible())
+		{
+			layer1.setVisible(!layer1.getVisible());
+			layer2.setVisible(!layer2.getVisible());
+			layer3.setVisible(!layer3.getVisible());
+			layer5.setVisible(!layer5.getVisible());
+		}
+		else
+		{
+			layer5.setVisible(!layer5.getVisible());
+			layer1.setVisible(!layer1.getVisible());
+			layer2.setVisible(!layer2.getVisible());
+			layer3.setVisible(!layer3.getVisible());
+		}
+		
+    }	
     </script>
   </body>
 </html>
