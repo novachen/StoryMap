@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
 
-    <title>尼泊尔地震（四视图）</title>
+    <title>尼泊尔地震变化检测</title>
 
     <script src="js/jquery.min.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -33,29 +33,35 @@
         .hh {
             height: 50%;
         }
+		
+		.nopadding {
+			padding: 0;
+		}
+		
     </style>
 </head>
 <body>
 
 <div class="row ah">
-    <div class="col-md-12 ah">
-        <div class="row hh">
-            <div class="col-md-6 ah">
-                <div id="map" class="map"></div>
-            </div>
-            <div class="col-md-6 ah">
-                <div id="map2" class="map"></div>
-            </div>
-        </div>
-        <div class="row hh">
-            <div class="col-md-6 ah">
-                <div id="map3" class="map"></div>
-            </div>
-            <div class="col-md-6 ah">
-                <div id="map4" class="map"></div>
-            </div>
-        </div>
-    </div>
+    <div class="col-md-2 ah">
+	<h1>尼泊尔地震变化检测</h1>
+	<p>
+		左上是2015年4月11日地震之前GF1拍摄的影像；右上是2015年4月27日地震之后GF1拍摄的影像；<br/>
+		左下是两个时相切换的动画；右下是变化检查工具的彩色示意图，颜色深的是变化大的区域。<br/>
+		<br/>
+		变化检测不是一件容易的事情，除了云的干扰以外，因为拍摄角度和太阳角度的不同导致显示高楼的不同侧面以及阴影都会干扰电脑的识别，所以目前还是需要人的智力来辨识图像变化的实质意义。<br/>
+		
+	</p>
+	</div>
+    <div class="col-md-5 ah nopadding">
+		<div id="map1" class="map hh"></div>
+		<div id="map3" class="map hh"></div>
+	</div>
+    <div class="col-md-5 ah nopadding">
+		<div id="map2" class="map hh"></div>
+		<div id="map4" class="map hh"></div>
+	</div>
+	</div>
 </div>
 
 <script>
@@ -127,18 +133,17 @@
         zoom: 3
     });
 
-    var map = new ol.Map({
+    var map1 = new ol.Map({
         layers: [
             new ol.layer.Group({
                 layers: [
-                    layer1,
-                    layer2
+                    layer10
                 ]
 
             })
         ],
         renderer: 'canvas',
-        target: 'map',
+        target: 'map1',
         view: view
     });
 
@@ -146,7 +151,7 @@
         layers: [
             new ol.layer.Group({
                 layers: [
-                    layer10
+                    layer20
                 ]
 
             })
@@ -160,7 +165,8 @@
         layers: [
             new ol.layer.Group({
                 layers: [
-                    layer20
+                    layer1,
+                    layer2
                 ]
 
             })
@@ -170,7 +176,8 @@
         view: view
     });
 
-    var map3 = new ol.Map({
+
+    var map4 = new ol.Map({
         layers: [
             new ol.layer.Group({
                 layers: [
@@ -184,43 +191,14 @@
         view: view
     });
 
-    function bindInputs(layerid, layer) {
-        var visibilityInput = $(layerid + ' input.visible');
-        visibilityInput.on('change', function () {
-            layer.setVisible(this.checked);
-        });
-        visibilityInput.prop('checked', layer.getVisible());
-
-        $.each(['opacity', 'hue', 'saturation', 'contrast', 'brightness'],
-                function (i, v) {
-                    var input = $(layerid + ' input.' + v);
-                    input.on('input change', function () {
-                        layer.set(v, parseFloat(this.value));
-                    });
-                    input.val(String(layer.get(v)));
-                }
-        );
-    }
-    map.getLayers().forEach(function (layer, i) {
-        bindInputs('#layer' + i, layer);
-        if (layer instanceof ol.layer.Group) {
-            layer.getLayers().forEach(function (sublayer, j) {
-                bindInputs('#layer' + i + j, sublayer);
-            });
-        }
-    });
-
-    $('#layertree li > span').click(function () {
-        $(this).siblings('fieldset').toggle();
-    });
+	layer1.setVisible(true);
+	layer2.setVisible(false);
 
     setInterval('flickImage()', 1000);
 
     function flickImage() {
-//        console.log(layer2.getVisible());
+        layer1.setVisible(!layer1.getVisible());
         layer2.setVisible(!layer2.getVisible());
-        var visibilityInput = $('#layer01' + ' input.visible');
-        visibilityInput.prop('checked', layer2.getVisible());
     }
 
 </script>
