@@ -115,7 +115,7 @@
 	
 	function hotPoint(h)
 	{
-		//view.setCenter(hotpt[h]);
+		view.setZoom(5);
 		var pan = ol.animation.pan({
           duration: 500,
           source: /** @type {ol.Coordinate} */ (view.getCenter())
