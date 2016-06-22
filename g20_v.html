@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no">
+	
+    <title>G20 2013</title>
+
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <style>
+
+        #layertree li > span {
+            cursor: pointer;
+        }
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+		.story {
+			z-index:100;
+			position:absolute;
+			left:30px;
+			top:20px;
+			right:30px;
+			height:100px;
+			overflow-y: auto;
+			background:#FFF;
+			filter:alpha(Opacity=70);-moz-opacity:0.7;opacity: 0.7;
+		}
+		
+		.bigtext {
+			font-size: 2em;
+		}		
+		
+    </style>
+</head>
+<body>
+
+<div class="row ah">
+	
+    <div id="map" class="map">
+    <div class="story">
+<p>	
+	参加G20-2013会议的国家领导人有<br>
+	中国主席<a onclick="javascript:hotPoint(0)" href="#">习近平</a>，
+	美国总统<a onclick="javascript:hotPoint(1)" href="#">奥巴马</a>，
+	俄罗斯总统<a onclick="javascript:hotPoint(2)" href="#">普京</a>，
+	德国总理<a onclick="javascript:hotPoint(3)" href="#">默克尔</a>，
+	英国首相<a onclick="javascript:hotPoint(4)" href="#">卡梅伦</a>，
+	韩国总统<a onclick="javascript:hotPoint(5)" href="#">朴槿惠</a>
+</p>
+
+<p>此实例由布谷鸟影像分析导览系统生成</p>	
+
+	</div>
+    </div>
+</div>
+
+<script>
+    var extent = [0, 0, 256*16, 256*16];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+    view = new ol.View({
+		projection: projection,
+        center: [1127,612],
+        zoom: 4
+    });
+	
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.XYZ({
+			    attributions: [
+					new ol.Attribution({
+						html: '此实例由布谷鸟影像分析导览系统生成'
+					})
+				],
+              url: 'tiles/g20/{z}/{x}/{-y}.png',
+			  projection: projection
+            })
+          })
+        ],
+        view: view
+      });
+	  
+	var hotpt = [[471,557],[1133,573],[1567,531],[1280,591],[1087,640],[2563,483]];
+	
+	function hotPoint(h)
+	{
+		view.setZoom(4);
+		var pan = ol.animation.pan({
+          duration: 500,
+          source: /** @type {ol.Coordinate} */ (view.getCenter())
+        });
+        map.beforeRender(pan);
+        view.setCenter(hotpt[h]);
+	}	  
+
+</script>
+</body>
+</html>
