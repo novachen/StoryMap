@@ -31,17 +31,26 @@
             height: 50%;
         }
 		
+        .scrolly {
+            overflow-y: auto;
+        }
+		
+		.nopadding {
+			padding: 0;
+		}
+		
     </style>
 </head>
 
 <body>
 
 <div class="row ah">
-    <div class="col-md-2 ah">
+    <div class="col-md-2 ah scrolly">
 		<button id="switchFlipBtn" class="btn btn-primary btn-lg btn-block">动画开关</button>
 		
 		<div class = "page-header">
 		<h3 class="text-center">大地脉动三十年</h3>
+		<h3 class="text-center">时空穿梭机</h3>
 		</div>
 
 利用陆地卫星30年累积的数据对世界各大城市的发展予以评估和展示。<br/><br/>
@@ -61,7 +70,10 @@
 <li><a onclick="javascript:hotPoint(3)" href="#">北京南站</a></li>
 <br/>
 <br/>		
-		
+
+		<div class = "page-footer">
+		<h3 class="text-center">中科院遥感地球所</h3>
+		</div>
 	</div>
 
     <div class="col-md-10 ah">
@@ -198,7 +210,9 @@
 
 	window.addEventListener('resize', checkSize);
 	checkSize();
-	  
+
+	alert("系统先装载30年的图像数据，会出现闪屏，直到右下角年份指示到2015，大约需要等待大约半分钟。之后会连续播放动画。");
+	
 </script>
 
 </body>
