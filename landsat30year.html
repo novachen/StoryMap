@@ -74,11 +74,13 @@
 		<div class = "page-footer">
 		<h3 class="text-center">中科院遥感地球所</h3>
 		</div>
+
 	</div>
 
     <div class="col-md-10 ah">
 		<div id="map1" class="map"></div>
 	</div>
+	
 	
 </div>
 
@@ -151,21 +153,32 @@
 		view: view,
 	});
 
-
+	doFlip = true;
+	init = true;
+    sh = setInterval('flipImage()', 2000);
+	
 	focuson = 0;
 	showImage();
 	
 
-	doFlip = true;
-    setInterval('flipImage()', 2000);
+
 
     function flipImage() {
-		if (doFlip)
+		if (init)
 		{
-			focuson ++;
-			if (focuson >= count)
-				focuson = 0;
-			showImage();
+			init = false;
+			clearInterval(sh);
+			sh = setInterval('flipImage()', 2000);
+		}
+		else
+		{
+			if (doFlip)
+			{
+				focuson ++;
+				if (focuson >= count)
+					focuson = 0;
+				showImage();
+			}
 		}
     }
 
@@ -181,9 +194,17 @@
 	
 	function showImage()
 	{
-		for (i = 0; i < count; i++)
-			layer[i].setVisible(false);
-		layer[focuson].setVisible(true);	
+		if (init)
+		{
+			for (i = 0; i < count; i++)
+				layer[i].setVisible(true);		
+		}
+		else
+		{
+			for (i = 0; i < count; i++)
+				layer[i].setVisible(false);
+			layer[focuson].setVisible(true);	
+		}
 	}
 	
 	var switchBtn = document.getElementById('switchFlipBtn');
@@ -211,7 +232,7 @@
 	window.addEventListener('resize', checkSize);
 	checkSize();
 
-	alert("系统先装载30年的图像数据，会出现闪屏，直到右下角年份指示到2015，大约需要等待大约半分钟。之后会连续播放动画。");
+	//alert("系统先装载30年的图像数据，会出现闪屏，直到右下角年份指示到2015，大约需要等待大约半分钟。之后会连续播放动画。");
 	
 </script>
 
