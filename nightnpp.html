@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no">
+
+    <title>大地夜色亮晶晶</title>
+
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+	<link href="css/offcanvas.css" rel="stylesheet">
+    
+	<style>
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+		
+		.nopadding {
+			padding: 0;
+		}
+		
+    </style>
+</head>
+
+<body>
+
+<div class="row ah">
+    <div class="col-md-2 ah scrolly">
+		<button id="switchFlipBtn" class="btn btn-primary btn-lg btn-block">动画开关</button>
+		
+		<div class = "page-header">
+		<h3 class="text-center">大地夜色亮晶晶</h3>
+		</div>
+
+NPP卫星具有夜光波段可以每天夜间对地面成像，这个数据有多种用途，最直观有趣的就是对城市以及各种大型基础设施发展的分析。<br/><br/>
+这里将卫星发射以来的数据整理成2012~2016五年间的年度产品，比较其中的重要变化。<br/><br/>
+
+		<div class = "page-footer">
+		<h3 class="text-center">中科院遥感地球所</h3>
+		</div>
+
+	</div>
+
+    <div class="col-md-10 ah">
+		<div id="map1" class="map"></div>
+	</div>
+	
+	
+</div>
+
+<script>
+	var t1 = 2012;
+	var t2 = 2016;
+	var count = t2 - t1 + 1;
+	
+	var sidex = 4000;
+	var sidey = 4000;
+	
+	var hotptArchive = [  ];
+	var hotptPos = new Array();
+	var hotptYear = new Array();
+	for (i = 0; i < hotptArchive.length; i++)
+	{
+		hotptPos[i] = [hotptArchive[i][0], sidey - hotptArchive[i][1]];
+		hotptYear[i] = hotptArchive[i][2] - t1;
+	}
+	
+    var extent = [0, 0, sidex, sidey];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+	
+
+	var layer = new Array();
+	
+
+	
+	for (t = t1; t <= t2; t++)
+	{
+	t_name = t.toString();
+	t_url = 'http://onalcm73g.bkt.clouddn.com/night/npp/annual' + t_name + '.jpg?1';
+	layer[t-t1] = new ol.layer.Image({
+                        source: new ol.source.ImageStatic({
+                            attributions: [
+                                new ol.Attribution({
+                                    html: t_name
+                                })
+                            ],
+                            url: t_url,
+                            projection: projection,
+                            imageExtent: extent
+                        })
+                    });
+	}
+
+
+    view = new ol.View({
+		projection: projection,
+        center: [sidex/2,sidey/2],
+        zoom: 3
+    });
+	
+	var attribution = new ol.control.Attribution({
+        collapsible: true
+      });
+
+	var map1 = new ol.Map({
+		target: 'map1',
+		layers: [
+			new ol.layer.Group({
+				layers: layer
+			})
+		],
+		controls: ol.control.defaults({attribution: false}).extend([attribution]),
+		view: view,
+	});
+
+	doFlip = true;
+	init = true;
+    sh = setInterval('flipImage()', 2000);
+	
+	focuson = 0;
+	showImage();
+	
+
+
+
+    function flipImage() {
+		if (init)
+		{
+			init = false;
+			clearInterval(sh);
+			sh = setInterval('flipImage()', 2000);
+		}
+		else
+		{
+			if (doFlip)
+			{
+				focuson ++;
+				if (focuson >= count)
+					focuson = 0;
+				showImage();
+			}
+		}
+    }
+
+	function stopFlip()
+	{
+		doFlip = false;
+	}
+	
+	function runFlip()
+	{
+		doFlip = true;
+	}
+	
+	function showImage()
+	{
+		if (init)
+		{
+			for (i = 0; i < count; i++)
+				layer[i].setVisible(true);		
+		}
+		else
+		{
+			for (i = 0; i < count; i++)
+				layer[i].setVisible(false);
+			layer[focuson].setVisible(true);	
+		}
+	}
+	
+	var switchBtn = document.getElementById('switchFlipBtn');
+    switchBtn.addEventListener('click', function() {	
+		if (doFlip)
+			stopFlip();
+		else
+			runFlip();
+	});
+
+	function hotPoint(h)
+	{
+        view.setCenter(hotptPos[h]);
+		view.setZoom(4);
+		focuson = hotptYear[h];
+		showImage();
+	}
+	
+	function checkSize() {
+		var small = map1.getSize()[0] < 600;
+		attribution.setCollapsible(small);
+		attribution.setCollapsed(small);
+	}
+
+	window.addEventListener('resize', checkSize);
+	checkSize();
+
+	//alert("系统先装载30年的图像数据，会出现闪屏，直到右下角年份指示到2015，大约需要等待大约半分钟。之后会连续播放动画。");
+	
+</script>
+
+</body>
+
+</html>
