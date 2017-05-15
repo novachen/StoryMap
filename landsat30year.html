@@ -1,253 +1,296 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-	<meta name="viewport" content="user-scalable=no">
-
+    <meta name="viewport" content="user-scalable=no">
     <title>大地脉动三十年</title>
-
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" type="text/css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+    <!--西部世界增加了slider控件的引用-->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.8.0/css/bootstrap-slider.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.8.0/bootstrap-slider.min.js"></script>
 
-	<link href="css/offcanvas.css" rel="stylesheet">
+    <link href="css/offcanvas.css" rel="stylesheet">
+    <style>
+    .map {
+        height: 100%;
+        width: 100%;
+    }
     
-	<style>
-
-        .map {
-            height: 100%;
-            width: 100%;
-        }
-		
-        .ah {
-            height: 100%;
-        }
-
-        .hh {
-            height: 50%;
-        }
-		
-        .scrolly {
-            overflow-y: auto;
-        }
-		
-		.nopadding {
-			padding: 0;
-		}
-		
+    .ah {
+        height: 100%;
+    }
+    
+    .hh {
+        height: 50%;
+    }
+    
+    .scrolly {
+        overflow-y: auto;
+    }
+    
+    .nopadding {
+        padding: 0;
+    }
+    
+    /*西部世界增加slider的样式*/
+    #slider_container {
+        position: absolute;
+        z-index: 10000;
+        left: 60px;
+        right: 100px;
+        bottom: 20px;
+    }
+    #slider_container .slider {
+        width: 100%;
+    }
+    #slider_container .slider-tick-label-container {
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+    }
+    
+    #slider {
+        width: 100%;
+    }
     </style>
 </head>
 
 <body>
+    <div class="row ah">
+        <div class="col-md-2 ah scrolly">
+            <button id="switchFlipBtn" class="btn btn-primary btn-lg btn-block">动画开关</button>
+            <div class="page-header">
+                <h1 class="text-center">大地脉动三十年</h1>
+                <h2 class="text-center">时空穿梭机</h2>
+            </div>
+			
+			<br/> <h3>陆地卫星</h3>
+            <br/> 美国陆地卫星（LANDSAT）系列卫星由美国航空航天局（NASA）和美国地质调查局（USGS）共同管理。陆地卫星的主要任务是调查地下矿藏、海洋资源和地下水资源，监视和协助管理农、林、畜牧业和水利资源的合理使用，预报农作物的收成，研究自然植物的生长和地貌，考察和预报各种严重的自然灾害（如地震）和环境污染，拍摄各种目标的图像，以及绘制各种专题图（如地质图、地貌图、水文图）等。
+			<br/>
+			<br/> <h3>中国遥感卫星地面站</h3>
+			<br/> 中国遥感卫星地面站是中科院的大科学装置，接收、处理、存档和分发美国陆地卫星系列中的Landsat-5、Landsat-7和LANDSAT-8三颗卫星的数据。
+			<br/>
+			<br/> <h3>时空穿梭机</h3>
+			<br/> 本作品利用陆地卫星三十多年年累积的数据形象客观地展示了北京的发展变化。
+            <br/> 点击下面的时空热点可以马上穿梭到特定时间特定的地点。
+            <br/>
+            <br/> <h4>大型社区</h4>
+            <br/>
+            <li><a onclick="javascript:hotPoint(0)" href="#">亦庄开发区</a></li>
+			<br/> 北京经济技术开发区位于中国北京东南亦庄地区，是北京市唯一同时享受国家级经济技术开发区和国家高新技术产业园区双重优惠政策的国家级经济技术开发区。北京经济技术开发区于1992年开始建设。1994年8月25日，被国务院批准为北京唯一的国家级经济技术开发区。1999年6月，经国务院批准，北京经济技术开发区范围内的七平方公里被确定为中关村科技园区亦庄科技园。2007年1月5日，北京市人民政府批复《亦庄新城规划(2005-2020年)》，明确指出以北京经济技术开发区为核心功能区的亦庄新城是北京东部发展带的重要节点和重点发展的新城之一。
+            <br/>
+			<br/> 北京经济技术开发区总体规划面积为46.8平方公里，由科学规划的产业区、高配置的商务区及高品质的生活区构成，是北京重点发展的三个新城之一，定位为京津城际发展走廊上的高新技术产业和先进制造业基地，并承担“疏解中心城人口的功能、聚集新的产业、带动区域发展”的重任。
+            <br/>
+			<br/> 2010年，北京经济技术开发区同大兴区行政资源整合，形成的新区，总面积达到1052平方公里。2011年开发区工业总产值达到2740亿元。
+            <br/>
+            <br/> <h4>文体设施</h4>
+            <br/>
+            <li><a onclick="javascript:hotPoint(1)" href="#">奥运场馆</a></li>
+			<br/> 北京奥林匹克公园位于北京市朝阳区，地处北京城中轴线北端，北至清河南岸，南至北土城路，东至安立路和北辰东路，西至林翠路和北辰西路，总占地面积11.59平方千米，集中体现了“科技、绿色、人文”三大理念，是融合了办公、商业、酒店、文化、体育、会议、居住多种功能的新型城市区域[1]  。2008年奥运会比赛期间，有鸟巢、水立方、国家体育馆、国家会议中心击剑馆、奥体中心体育场、奥体中心体育馆、英东游泳馆、奥林匹克公园射箭场、奥林匹克公园网球场、奥林匹克公园曲棍球场等10个奥运会竞赛场馆。此外，还包括奥运主新闻中心（MPC）、国际广播中心（IBC）、奥林匹克接待中心、奥运村（残奥村）等在内的7个非竞赛场馆[1]  ，是包含体育赛事、会展中心、科教文化、休闲购物等多种功能在内的综合性市民公共活动中心。
+            <br/>
+            <br/>
+            <li><a onclick="javascript:hotPoint(2)" href="#">国家大剧院</a></li>
+            <br/>
+            <br/> <h4>交通设施</h4>
+            <br/>
+            <li><a onclick="javascript:hotPoint(3)" href="#">首都机场T3航站楼</a></li>
+			<br/>
+            <li><a onclick="javascript:hotPoint(4)" href="#">北京北站</a></li>
+            <br/>
+            <li><a onclick="javascript:hotPoint(5)" href="#">北京南站</a></li>
+            <br/>
+            <br/>
+            <div class="page-footer">
+                <h3 class="text-center">中科院遥感地球所</h3>
+            </div>
+        </div>
+        <div class="col-md-10 ah">
+            <div id="slider_container">
+                <input type="text" id="slider" />
+            </div>
+            <div id="map1" class="map"></div>
+        </div>
+    </div>
+    <script>
+    var t1 = 1985;
+    var t2 = 2016;
+    var count = t2 - t1 + 1;
 
-<div class="row ah">
-    <div class="col-md-2 ah scrolly">
-		<button id="switchFlipBtn" class="btn btn-primary btn-lg btn-block">动画开关</button>
-		
-		<div class = "page-header">
-		<h3 class="text-center">大地脉动三十年</h3>
-		<h3 class="text-center">时空穿梭机</h3>
-		</div>
+    var sidex = 2560;
+    var sidey = 2560;
 
-利用陆地卫星30年累积的数据对世界各大城市的发展予以评估和展示。<br/><br/>
-网页首先逐年加载数据，然后开始连续动画播放。点击下面的时空热点可以回到建设项目开工的时候。<br/><br/>
-		
-北京重大建设项目<br/><br/>
-1991年<br/>
-<li><a onclick="javascript:hotPoint(0)" href="#">亦庄开发区</a></li>			
-<br/>
-<br/>
+    var hotptArchive = [
+        [1897, 1866, 1991],
+        [1142, 749, 2000],
+        [1123, 1281, 2001],
+        [2423, 313, 2004],
+        [905, 1043, 2004],
+        [1058, 1512, 2005]
+    ];
+    var hotptPos = new Array();
+    var hotptYear = new Array();
+    for (i = 0; i < hotptArchive.length; i++) {
+        hotptPos[i] = [hotptArchive[i][0], sidey - hotptArchive[i][1]];
+        hotptYear[i] = hotptArchive[i][2] - t1;
+    }
 
-2000年<br/>
-<li><a onclick="javascript:hotPoint(1)" href="#">奥运场馆</a></li>			
-<br/>
-<br/>
-
-2001年<br/>
-<li><a onclick="javascript:hotPoint(2)" href="#">国家大剧院</a></li>			
-<br/>
-<br/>
-
-2004年<br/>
-<li><a onclick="javascript:hotPoint(3)" href="#">首都机场T3航站楼</a></li>
-<li><a onclick="javascript:hotPoint(4)" href="#">北京北站</a></li>
-<br/>
-<br/>
-
-2005年<br/>
-<li><a onclick="javascript:hotPoint(5)" href="#">北京南站</a></li>
-<br/>
-<br/>		
-
-		<div class = "page-footer">
-		<h3 class="text-center">中科院遥感地球所</h3>
-		</div>
-
-	</div>
-
-    <div class="col-md-10 ah">
-		<div id="map1" class="map"></div>
-	</div>
-	
-	
-</div>
-
-<script>
-	var t1 = 1985;
-	var t2 = 2016;
-	var count = t2 - t1 + 1;
-	
-	var sidex = 2560;
-	var sidey = 2560;
-	
-	var hotptArchive = [ [1897,1866,1991],[1142,749,2000],[1123,1281,2001],[2423,313,2004],[905,1043,2004],[1058,1512,2005] ];
-	var hotptPos = new Array();
-	var hotptYear = new Array();
-	for (i = 0; i < hotptArchive.length; i++)
-	{
-		hotptPos[i] = [hotptArchive[i][0], sidey - hotptArchive[i][1]];
-		hotptYear[i] = hotptArchive[i][2] - t1;
-	}
-	
     var extent = [0, 0, sidex, sidey];
     var projection = new ol.proj.Projection({
         code: 'xkcd-image',
         units: 'pixels',
         extent: extent
     });
-	
 
-	var layer = new Array();
-	
 
-	
-	for (t = t1; t <= t2; t++)
-	{
-	t_name = t.toString();
-	t_url = 'http://onalcm73g.bkt.clouddn.com/landsat30/beijing/' + t_name + '.jpg?1';
-	layer[t-t1] = new ol.layer.Image({
-                        source: new ol.source.ImageStatic({
-                            attributions: [
-                                new ol.Attribution({
-                                    html: t_name
-                                })
-                            ],
-                            url: t_url,
-                            projection: projection,
-                            imageExtent: extent
-                        })
-                    });
-	}
+    var layer = new Array();
+
+
+
+    for (t = t1; t <= t2; t++) {
+        t_name = t.toString();
+        t_url = 'http://onalcm73g.bkt.clouddn.com/landsat30/beijing/' + t_name + '.jpg?1';
+        layer[t - t1] = new ol.layer.Image({
+            source: new ol.source.ImageStatic({
+                attributions: [
+                    new ol.Attribution({
+                        html: t_name
+                    })
+                ],
+                url: t_url,
+                projection: projection,
+                imageExtent: extent
+            })
+        });
+    }
 
 
     view = new ol.View({
-		projection: projection,
-        center: [sidex/2,sidey/2],
+        projection: projection,
+        center: [sidex / 2, sidey / 2],
         zoom: 3
     });
-	
-	var attribution = new ol.control.Attribution({
+
+    var attribution = new ol.control.Attribution({
         collapsible: true
-      });
+    });
 
-	var map1 = new ol.Map({
-		target: 'map1',
-		layers: [
-			new ol.layer.Group({
-				layers: layer
-			})
-		],
-		controls: ol.control.defaults({attribution: false}).extend([attribution]),
-		view: view,
-	});
+    var map1 = new ol.Map({
+        target: 'map1',
+        layers: [
+            new ol.layer.Group({
+                layers: layer
+            })
+        ],
+        controls: ol.control.defaults({
+            attribution: false
+        }).extend([attribution]),
+        view: view,
+    });
 
-	doFlip = true;
-	init = true;
+    doFlip = true;
+    init = true;
     sh = setInterval('flipImage()', 2000);
-	
-	focuson = 0;
-	showImage();
-	
+
+    focuson = 0;
+    showImage();
+
 
 
 
     function flipImage() {
-		if (init)
-		{
-			init = false;
-			clearInterval(sh);
-			sh = setInterval('flipImage()', 2000);
-		}
-		else
-		{
-			if (doFlip)
-			{
-				focuson ++;
-				if (focuson >= count)
-					focuson = 0;
-				showImage();
-			}
-		}
+        if (init) {
+            init = false;
+            clearInterval(sh);
+            sh = setInterval('flipImage()', 2000);
+        } else {
+            if (doFlip) {
+                focuson++;
+                if (focuson >= count)
+                    focuson = 0;
+                showImage();
+
+                changeSlider();
+            }
+        }
     }
 
-	function stopFlip()
-	{
-		doFlip = false;
-	}
-	
-	function runFlip()
-	{
-		doFlip = true;
-	}
-	
-	function showImage()
-	{
-		if (init)
-		{
-			for (i = 0; i < count; i++)
-				layer[i].setVisible(true);		
-		}
-		else
-		{
-			for (i = 0; i < count; i++)
-				layer[i].setVisible(false);
-			layer[focuson].setVisible(true);	
-		}
-	}
-	
-	var switchBtn = document.getElementById('switchFlipBtn');
-    switchBtn.addEventListener('click', function() {	
-		if (doFlip)
-			stopFlip();
-		else
-			runFlip();
-	});
+    function stopFlip() {
+        doFlip = false;
+    }
 
-	function hotPoint(h)
-	{
+    function runFlip() {
+        doFlip = true;
+    }
+
+    function showImage() {
+        if (init) {
+            for (i = 0; i < count; i++)
+                layer[i].setVisible(true);
+        } else {
+            for (i = 0; i < count; i++)
+                layer[i].setVisible(false);
+            layer[focuson].setVisible(true);
+        }
+    }
+
+    var switchBtn = document.getElementById('switchFlipBtn');
+    switchBtn.addEventListener('click', function() {
+        if (doFlip)
+            stopFlip();
+        else
+            runFlip();
+    });
+
+    function hotPoint(h) {
         view.setCenter(hotptPos[h]);
-		view.setZoom(4);
-		focuson = hotptYear[h];
-		showImage();
-	}
-	
-	function checkSize() {
-		var small = map1.getSize()[0] < 600;
-		attribution.setCollapsible(small);
-		attribution.setCollapsed(small);
-	}
+        view.setZoom(4);
+        focuson = hotptYear[h];
+        showImage();
+    }
 
-	window.addEventListener('resize', checkSize);
-	checkSize();
+    function checkSize() {
+        var small = map1.getSize()[0] < 600;
+        attribution.setCollapsible(small);
+        attribution.setCollapsed(small);
+    }
 
-	//alert("系统先装载30年的图像数据，会出现闪屏，直到右下角年份指示到2015，大约需要等待大约半分钟。之后会连续播放动画。");
-	
-</script>
+    window.addEventListener('resize', checkSize);
+    checkSize();
 
+
+    //西部世界添加
+    let years = [];
+    for (let i = t1; i <= t2; i++) {
+        years.push(i);
+    }
+    //创建拖动条
+    var slider = $('#slider').slider({
+        ticks: years,
+        //ticks_labels: years,
+        step: 1,
+        tooltip: 'always',
+        formatter: function(value) {
+            return  value +'年';
+        }
+    });
+    //当拖动之后显示该年份影像
+    slider.on("slideStop",function(p){
+        focuson = p.value  - years[0];
+        showImage();
+    });
+    //当动画定时器修改之后，更新slider的显示
+    function changeSlider(){
+        
+        slider.slider('setValue', years[0]+focuson);
+    }
+ 
+    //alert("系统先装载30年的图像数据，会出现闪屏，直到右下角年份指示到2015，大约需要等待大约半分钟。之后会连续播放动画。");
+    </script>
 </body>
 
 </html>

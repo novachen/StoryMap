@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>大地脉动三十年</title>
+
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/ol.css" type="text/css">
+    <script src="js/ol.js"></script>
+    <link href="css/offcanvas.css" rel="stylesheet">
+    
+	<style>
+
+        .map {
+            height: 100%;
+            width: 100%;
+        }
+		
+        .ah {
+            height: 100%;
+        }
+
+        .hh {
+            height: 50%;
+        }
+		
+        .scrolly {
+            overflow-y: auto;
+        }
+		
+    </style>
+</head>
+
+<body>
+
+<div class="row ah">
+
+
+    <div class="col-md-10 ah">
+		<div id="map1" class="map"></div>
+	</div>
+	
+    <div class="col-md-2 ah scrolly">
+		<button id="switchFlipBtn" class="btn btn-primary btn-lg btn-block">动画开关</button>
+		
+		<div class = "page-header">
+		<h3 class="text-center">大地脉动三十年</h3>
+		<h3 class="text-center">时空穿梭机</h3>
+		</div>
+
+利用陆地卫星30年累积的数据对世界各大城市的发展予以评估和展示。<br/><br/>
+网页首先逐年加载数据，然后开始连续动画播放。点击下面的时空热点可以回到建设项目开工的时候。<br/><br/>
+		
+北京重大建设项目<br/><br/>
+1991年<br/>
+<li><a onclick="javascript:hotPoint(0)" href="#">亦庄开发区</a></li>			
+<br/>
+<br/>
+
+2000年<br/>
+<li><a onclick="javascript:hotPoint(1)" href="#">奥运场馆</a></li>			
+<br/>
+<br/>
+
+2001年<br/>
+<li><a onclick="javascript:hotPoint(2)" href="#">国家大剧院</a></li>			
+<br/>
+<br/>
+
+2004年<br/>
+<li><a onclick="javascript:hotPoint(3)" href="#">首都机场T3航站楼</a></li>
+<li><a onclick="javascript:hotPoint(4)" href="#">北京北站</a></li>
+<br/>
+<br/>
+
+2005年<br/>
+<li><a onclick="javascript:hotPoint(5)" href="#">北京南站</a></li>
+<br/>
+<br/>		
+
+		<div class = "page-footer">
+		<h3 class="text-center">中科院遥感地球所</h3>
+		</div>
+
+	</div>
+	
+</div>
+
+<script>
+	var t1 = 1985;
+	var t2 = 2016;
+	var count = t2 - t1 + 1;
+	
+	var sidex = 4864;
+	var sidey = 6144;
+	
+	var hotptArchive = [ [1897,1866,1991],[1142,749,2000],[1123,1281,2001],[2423,313,2004],[905,1043,2004],[1058,1512,2005] ];
+	var hotptPos = new Array();
+	var hotptYear = new Array();
+	for (i = 0; i < hotptArchive.length; i++)
+	{
+		hotptPos[i] = [hotptArchive[i][0], sidey - hotptArchive[i][1]];
+		hotptYear[i] = hotptArchive[i][2] - t1;
+	}
+	
+    var extent = [0, 0, sidex, sidey];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+	
+
+	var layer = new Array();
+	
+
+	
+	for (t = t1; t <= t2; t++)
+	{
+	t_name = t.toString();
+	// t_url = 'http://onalcm73g.bkt.clouddn.com/landsat30/beijing/' + t_name + '.jpg?1';
+	t_url = 'http://story.ceode.ac.cn:1809/image/beijing/' + t_name + '.jpg';
+	t_html = t_name; //"<font size='20'>"+ t_name + "</font>";
+	layer[t-t1] = new ol.layer.Image({
+                        source: new ol.source.ImageStatic({
+                            attributions: [
+                                new ol.Attribution({
+                                    html: t_html
+                                })
+                            ],
+                            url: t_url,
+                            projection: projection,
+                            imageExtent: extent
+                        })
+                    });
+	}
+
+
+    view = new ol.View({
+		projection: projection,
+        center: [sidex/2,sidey/2],
+        zoom: 3
+    });
+	
+	var attribution = new ol.control.Attribution({
+        collapsible: true
+      });
+
+	var map1 = new ol.Map({
+		target: 'map1',
+		layers: [
+			new ol.layer.Group({
+				layers: layer
+			})
+		],
+		controls: ol.control.defaults({attribution: false}).extend([attribution]),
+		view: view,
+	});
+
+	doFlip = true;
+	init = true;
+    sh = setInterval('flipImage()', 2000);
+	
+	focuson = 0;
+	showImage();
+	
+
+
+
+    function flipImage() {
+		if (init)
+		{
+			init = false;
+			clearInterval(sh);
+			sh = setInterval('flipImage()', 2000);
+		}
+		else
+		{
+			if (doFlip)
+			{
+				focuson ++;
+				if (focuson >= count)
+					focuson = 0;
+				showImage();
+			}
+		}
+    }
+
+	function stopFlip()
+	{
+		doFlip = false;
+	}
+	
+	function runFlip()
+	{
+		doFlip = true;
+	}
+	
+	function showImage()
+	{
+		if (init)
+		{
+			for (i = 0; i < count; i++)
+				layer[i].setVisible(true);		
+		}
+		else
+		{
+			for (i = 0; i < count; i++)
+				layer[i].setVisible(false);
+			layer[focuson].setVisible(true);	
+		}
+	}
+	
+	var switchBtn = document.getElementById('switchFlipBtn');
+    switchBtn.addEventListener('click', function() {	
+		if (doFlip)
+			stopFlip();
+		else
+			runFlip();
+	});
+
+	function hotPoint(h)
+	{
+        view.setCenter(hotptPos[h]);
+		view.setZoom(4);
+		focuson = hotptYear[h];
+		showImage();
+	}
+	
+	function checkSize() {
+		var small = map1.getSize()[0] < 600;
+		attribution.setCollapsible(small);
+		attribution.setCollapsed(small);
+	}
+
+	window.addEventListener('resize', checkSize);
+	checkSize();
+
+	//alert("系统先装载30年的图像数据，会出现闪屏，直到右下角年份指示到2015，大约需要等待大约半分钟。之后会连续播放动画。");
+	
+</script>
+
+</body>
+
+</html>
